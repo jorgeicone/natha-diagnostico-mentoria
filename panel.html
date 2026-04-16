@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Panel · Diagnósticos Recibidos · Simoné</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --v1:#3d5016;--v2:#567a22;--v3:#7a9e32;
+  --na:#e07820;--rj:#c03820;
+  --cr:#f0e8cc;--cr2:#e8d9a8;--bl:#faf6ee;
+  --tx:#2a3810;--ts:#4a5a30;--tl:#7a8a60;
+  --card-bg:#fff9ee;--shadow:rgba(61,80,22,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:var(--cr);color:var(--tx);min-height:100vh;}
+h1,h2,h3,h4{font-family:'Montserrat',sans-serif;}
+
+.topbar{
+  background:var(--v1);padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-brand{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:1px;}
+.topbar-brand em{display:block;font-size:10px;font-weight:300;opacity:.6;font-style:normal;}
+.topbar-tag{background:rgba(255,255,255,.15);color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;}
+
+.hero{
+  background:linear-gradient(135deg,var(--v1),var(--v2));
+  padding:28px 20px 24px;text-align:center;
+}
+.hero h1{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
+.hero p{font-size:12px;color:rgba(255,255,255,.7);}
+
+.body{padding:16px;max-width:600px;margin:0 auto;}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.stat-card{
+  background:var(--card-bg);border-radius:14px;padding:14px 12px;
+  text-align:center;box-shadow:0 2px 10px var(--shadow);
+  border:1px solid rgba(86,122,34,.12);
+}
+.stat-val{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;color:var(--v1);}
+.stat-label{font-size:10px;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;font-weight:700;}
+
+.filter-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;}
+.filter-btn{
+  flex-shrink:0;padding:7px 14px;border-radius:20px;
+  border:1.5px solid rgba(86,122,34,.2);background:var(--card-bg);
+  font-size:11px;font-weight:700;color:var(--ts);cursor:pointer;
+  transition:all .2s;font-family:'Montserrat',sans-serif;
+}
+.filter-btn.active{background:var(--v1);color:#fff;border-color:var(--v1);}
+
+.diag-card{
+  background:var(--card-bg);border-radius:16px;padding:16px;
+  margin-bottom:12px;box-shadow:0 2px 12px var(--shadow);
+  border:1px solid rgba(86,122,34,.12);cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+}
+.diag-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(86,122,34,.18);}
+.diag-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.diag-name{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:var(--v1);}
+.diag-date{font-size:11px;color:var(--tl);}
+.diag-primary{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:20px;
+  background:rgba(86,122,34,.1);color:var(--v1);
+  font-size:11px;font-weight:700;margin-bottom:10px;
+}
+.diag-scores{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.score-pill{
+  background:rgba(61,80,22,.07);border-radius:8px;
+  padding:4px 10px;font-size:10px;color:var(--ts);font-weight:600;
+}
+.score-pill.high{background:rgba(224,120,32,.12);color:var(--rj);}
+.diag-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.chip{padding:3px 10px;border-radius:12px;font-size:10px;background:var(--cr2);color:var(--v1);font-weight:600;}
+.diag-actions{display:flex;gap:8px;margin-top:12px;}
+.btn-sm{
+  flex:1;padding:9px;border-radius:10px;font-size:11px;font-weight:700;
+  font-family:'Montserrat',sans-serif;border:none;cursor:pointer;transition:all .2s;
+}
+.btn-ver{background:var(--v2);color:#fff;}
+.btn-wsp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;}
+.btn-ver:hover{background:var(--v1);}
+
+.empty-state{
+  text-align:center;padding:48px 20px;
+  font-size:14px;color:var(--tl);
+}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px;opacity:.5;}
+.empty-state p{line-height:1.7;}
+
+.detail-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:200;overflow-y:auto;padding:20px 0;
+}
+.detail-overlay.open{display:block;}
+.detail-modal{
+  background:var(--bl);border-radius:20px 20px 0 0;
+  position:fixed;bottom:0;left:0;right:0;max-height:90vh;
+  overflow-y:auto;padding:24px 20px 40px;z-index:201;
+}
+.modal-handle{width:40px;height:4px;background:rgba(0,0,0,.15);border-radius:2px;margin:0 auto 20px;}
+.modal-title{font-size:18px;font-weight:800;color:var(--v1);margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--tl);margin-bottom:16px;}
+.modal-section{margin-bottom:16px;}
+.modal-section-title{font-size:11px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.modal-text{font-size:13px;color:var(--ts);line-height:1.7;background:rgba(86,122,34,.06);border-radius:10px;padding:12px 14px;}
+.modal-close{
+  position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;
+  background:rgba(61,80,22,.1);border:none;font-size:16px;cursor:pointer;color:var(--v1);
+}
+
+.clear-btn{
+  display:block;width:100%;padding:12px;border-radius:12px;margin-top:20px;
+  border:2px solid rgba(192,56,32,.3);background:transparent;
+  color:var(--rj);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;
+}
+.clear-btn:hover{background:rgba(192,56,32,.08);}
+
+.dim-names={emocional:'Emocional',comunicacional:'Comunicacional',espiritual:'Espiritual',cognitivo:'Cognitivo'};
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Simoné<em>Arte y Naturaleza</em></div>
+  <div class="topbar-tag">Panel Nathalia</div>
+</div>
+
+<div class="hero">
+  <h1>Diagnósticos Recibidos</h1>
+  <p>Abre cada enlace compartido por tus clientes para registrar sus diagnósticos aquí</p>
+</div>
+
+<div class="body">
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="stat-val" id="stat-total">0</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-hoy">0</div><div class="stat-label">Esta semana</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-dim">—</div><div class="stat-label">Dim. más común</div></div>
+  </div>
+
+  <div class="filter-row" id="filter-row">
+    <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
+    <button class="filter-btn" onclick="setFilter('emocional',this)">💚 Emocional</button>
+    <button class="filter-btn" onclick="setFilter('comunicacional',this)">🗣️ Comunicacional</button>
+    <button class="filter-btn" onclick="setFilter('espiritual',this)">✨ Espiritual</button>
+    <button class="filter-btn" onclick="setFilter('cognitivo',this)">🧠 Cognitivo</button>
+  </div>
+
+  <div id="list-container"></div>
+  <button class="clear-btn" onclick="confirmClear()">🗑 Limpiar todos los diagnósticos</button>
+</div>
+
+<!-- Detail Modal -->
+<div class="detail-overlay" id="detail-overlay" onclick="closeModal(event)">
+  <div class="detail-modal" id="detail-modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeDetail()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+const DIM_ICONS = {emocional:'💚',comunicacional:'🗣️',espiritual:'✨',cognitivo:'🧠'};
+const DIM_NAMES = {emocional:'Emocional',comunicacional:'Comunicacional',espiritual:'Espiritual',cognitivo:'Cognitivo'};
+let allDiags = [];
+let currentFilter = 'todos';
+
+function loadDiags() {
+  try { allDiags = JSON.parse(localStorage.getItem('natha_panel') || '[]'); } catch(e) { allDiags = []; }
+}
+
+function render() {
+  loadDiags();
+  const filtered = currentFilter === 'todos' ? allDiags : allDiags.filter(d => d._primary === currentFilter);
+
+  // Stats
+  document.getElementById('stat-total').textContent = allDiags.length;
+  const oneWeekAgo = Date.now() - 7*24*60*60*1000;
+  const recientes = allDiags.filter(d => {
+    try { return new Date(d._recibido) > oneWeekAgo; } catch(e) { return true; }
+  }).length;
+  document.getElementById('stat-hoy').textContent = recientes;
+
+  // Most common dimension
+  if (allDiags.length) {
+    const counts = {};
+    allDiags.forEach(d => { if (d._primary) counts[d._primary] = (counts[d._primary]||0)+1; });
+    const topDim = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+    if (topDim) document.getElementById('stat-dim').textContent = DIM_ICONS[topDim[0]] || '—';
+  }
+
+  const container = document.getElementById('list-container');
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>Aún no hay diagnósticos registrados.<br><br>Cuando un cliente abra el enlace compartido<br>desde <strong>este dispositivo</strong>, aparecerá aquí.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map((d, i) => {
+    const scores = d._scores || {};
+    const primary = d._primary || '';
+    const nombre = d.nombre || 'Sin nombre';
+    const fecha = d.fecha || d._recibido || '—';
+    const estado = d['estado-em'] || '';
+    const estadoChips = estado.split('|').filter(Boolean).slice(0,3);
+    const waMsg = encodeURIComponent(`Hola ${nombre}! Vi tu diagnóstico. Tu dimensión principal es ${DIM_NAMES[primary] || primary}. ¿Quieres que agendemos tu primera sesión?`);
+
+    return `
+    <div class="diag-card" onclick="openDetail(${i})">
+      <div class="diag-header">
+        <div class="diag-name">${nombre}</div>
+        <div class="diag-date">${fecha}</div>
+      </div>
+      ${primary ? `<div class="diag-primary">${DIM_ICONS[primary]||''} Foco: ${DIM_NAMES[primary]||primary}</div>` : ''}
+      <div class="diag-scores">
+        ${Object.entries(scores).map(([k,v]) => `<div class="score-pill ${v>=75?'high':''}">${DIM_ICONS[k]||''} ${v}%</div>`).join('')}
+      </div>
+      ${estadoChips.length ? `<div class="diag-chips">${estadoChips.map(c=>`<div class="chip">${c.substring(0,30)}</div>`).join('')}</div>` : ''}
+      <div class="diag-actions" onclick="event.stopPropagation()">
+        <button class="btn-sm btn-ver" onclick="verDiag(${i})">Ver diagnóstico completo</button>
+        <button class="btn-sm btn-wsp" onclick="window.open('https://wa.me/57'+prompt('Número del cliente (sin +57):','')+'?text=${waMsg}')">WhatsApp</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function verDiag(i) {
+  const d = (currentFilter==='todos' ? allDiags : allDiags.filter(x=>x._primary===currentFilter))[i];
+  if (!d || !d._encoded) {
+    alert('Este diagnóstico no tiene enlace disponible. Pide al cliente que comparta el enlace de nuevo.');
+    return;
+  }
+  const diagUrl = 'Desarrollo 5 - Diagnostico Inicial Mentoria.html#ver=' + d._encoded;
+  window.open(diagUrl, '_blank');
+}
+
+function openDetail(i) {
+  const filtered = currentFilter==='todos' ? allDiags : allDiags.filter(x=>x._primary===currentFilter);
+  const d = filtered[i];
+  if (!d) return;
+
+  const scores = d._scores || {};
+  const primary = d._primary || '';
+  const nombre = d.nombre || 'Sin nombre';
+
+  const mc = document.getElementById('modal-content');
+  mc.innerHTML = `
+    <div class="modal-title">${nombre}</div>
+    <div class="modal-sub">${d.fecha || ''} · ${d['modal']||''} · ${d['canal']||''}</div>
+    ${primary ? `<div class="diag-primary" style="margin-bottom:12px;">${DIM_ICONS[primary]||''} Dimensión principal: ${DIM_NAMES[primary]||primary}</div>` : ''}
+    <div class="diag-scores" style="margin-bottom:14px;">
+      ${Object.entries(scores).map(([k,v])=>`<div class="score-pill ${v>=75?'high':''}">${DIM_ICONS[k]||''} ${DIM_NAMES[k]}: ${v}%</div>`).join('')}
+    </div>
+    ${d['estado-em'] ? `<div class="modal-section"><div class="modal-section-title">Estado emocional</div><div class="modal-text">${d['estado-em'].replace(/\|/g,' · ')}</div></div>` : ''}
+    ${d['area'] ? `<div class="modal-section"><div class="modal-section-title">Área de atención</div><div class="modal-text">${d['area']}</div></div>` : ''}
+    ${d['situacion'] ? `<div class="modal-section"><div class="modal-section-title">Su situación actual</div><div class="modal-text">${d['situacion']}</div></div>` : ''}
+    ${d['resultado'] ? `<div class="modal-section"><div class="modal-section-title">Resultados esperados</div><div class="modal-text">${d['resultado'].replace(/\|/g,' · ')}</div></div>` : ''}
+    ${d['proceso'] ? `<div class="modal-section"><div class="modal-section-title">Proceso que resuena</div><div class="modal-text">${d['proceso']}</div></div>` : ''}
+    ${d['mensaje'] ? `<div class="modal-section"><div class="modal-section-title">Mensaje para Nathalia</div><div class="modal-text">${d['mensaje']}</div></div>` : ''}
+    ${d['extra'] ? `<div class="modal-section"><div class="modal-section-title">Información adicional</div><div class="modal-text">${d['extra']}</div></div>` : ''}
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn-sm btn-ver" style="flex:1;padding:12px;" onclick="verDiag(${i});closeDetail();">Ver diagnóstico</button>
+    </div>`;
+
+  document.getElementById('detail-overlay').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('detail-overlay')) closeDetail();
+}
+
+function confirmClear() {
+  if (confirm('¿Eliminar todos los diagnósticos del panel? Esta acción no se puede deshacer.')) {
+    localStorage.removeItem('natha_panel');
+    render();
+  }
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
