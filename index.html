@@ -736,6 +736,12 @@ input[type=range]::-webkit-slider-thumb{
     <div class="loading-step" id="ls-3"><div class="step-dot">✓</div> Diseñando tu ruta de transformación</div>
     <div class="loading-step" id="ls-4"><div class="step-dot">✓</div> Preparando mensaje personalizado</div>
   </div>
+  <button id="btn-ver-resultado" onclick="showResults(formData,false)"
+    style="display:none;margin-top:28px;padding:16px 32px;border-radius:12px;border:none;
+    background:#e07820;color:#fff;font-family:Montserrat,sans-serif;font-size:15px;
+    font-weight:700;cursor:pointer;letter-spacing:.3px;">
+    Ver mi diagnóstico →
+  </button>
 </div>
 
 <!-- ═══════════════════════════════════
@@ -923,14 +929,19 @@ function submitDiag() {
   goScreen('s-loading');
   document.getElementById('progress-bar-fill').style.width = '100%';
 
-  const steps = ['ls-1','ls-2','ls-3','ls-4'];
+  var stepsCompleted = 0;
+  var steps = ['ls-1','ls-2','ls-3','ls-4'];
   steps.forEach(function(id, i) {
-    setTimeout(function(){ document.getElementById(id).classList.add('done'); }, 500 + i*600);
+    setTimeout(function(){
+      document.getElementById(id).classList.add('done');
+      stepsCompleted++;
+      if (stepsCompleted === steps.length) {
+        // All steps done: show fallback button AND try auto-transition
+        document.getElementById('btn-ver-resultado').style.display = 'block';
+        setTimeout(function() { showResults(formData, false); }, 600);
+      }
+    }, 500 + i*600);
   });
-
-  setTimeout(function() {
-    showResults(formData, false);
-  }, 3000);
 }
 
 // ═══════════════════════════════════════
