@@ -3,756 +3,1310 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Diagnóstico Inicial · Mentoría Individual · Nathalia Velasco</title>
+<title>Diagnóstico Inicial · Mentoría · Simoné Arte y Naturaleza</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --v1:#3d5016; --v2:#567a22; --v3:#7a9e32;
   --na:#e07820; --rj:#c03820;
-  --cr:#f0e8cc; --cr2:#e0d4b0; --bl:#faf6ee;
-  --tx:#2a3810; --ts:#4a5a30;
-  --radio:10px;
+  --cr:#f0e8cc; --cr2:#e8d9a8; --bl:#faf6ee;
+  --tx:#2a3810; --ts:#4a5a30; --tl:#7a8a60;
+  --card-bg:#fff9ee; --shadow:rgba(61,80,22,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{font-family:'Lato',sans-serif;background:var(--cr);color:var(--tx);min-height:100vh;}
-h1,h2,h3,h4{font-family:'Montserrat',sans-serif;}
+body{font-family:'Lato',sans-serif;background:var(--cr);color:var(--tx);min-height:100vh;overflow-x:hidden;}
+h1,h2,h3,h4,h5{font-family:'Montserrat',sans-serif;}
 
-/* ─── SCREEN SYSTEM ─── */
-.screen{display:none;min-height:100vh;animation:fadeIn .4s ease;}
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;}
 .screen.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp .55s cubic-bezier(.22,1,.36,1) both;}
+.fade-in-d1{animation-delay:.08s;}
+.fade-in-d2{animation-delay:.16s;}
+.fade-in-d3{animation-delay:.24s;}
+.fade-in-d4{animation-delay:.32s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 
-/* ─── NAV ─── */
-.nav{background:var(--v1);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.nav-brand{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;}
-.nav-brand span{display:block;font-size:10px;font-weight:300;opacity:.65;letter-spacing:.5px;text-transform:none;}
-.nav-step{font-size:11px;color:rgba(255,255,255,.6);font-weight:500;}
+/* ── PROGRESS BAR ── */
+#progress-bar-wrap{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:4px;background:rgba(61,80,22,.15);
+  display:none;
+}
+#progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--v2),var(--na));transition:width .6s ease;width:0%;}
 
-/* ─── WELCOME SCREEN ─── */
+/* ── NAV ── */
+.topnav{
+  background:var(--v1);padding:13px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:4px;z-index:100;
+}
+.topnav-brand{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:#fff;letter-spacing:1.5px;text-transform:uppercase;}
+.topnav-brand em{display:block;font-size:10px;font-weight:300;opacity:.6;font-style:normal;letter-spacing:.5px;}
+.topnav-step{font-size:11px;color:rgba(255,255,255,.55);font-weight:500;}
+
+/* ═══════════════════════════
+   WELCOME SCREEN
+═══════════════════════════ */
 #s-welcome{background:var(--bl);}
 .welcome-hero{
-  background:linear-gradient(160deg,var(--v1) 0%,var(--v2) 60%,var(--v3) 100%);
-  padding:56px 24px 48px;text-align:center;position:relative;overflow:hidden;
+  background:linear-gradient(150deg,var(--v1) 0%,var(--v2) 55%,#8aaa3a 100%);
+  padding:60px 24px 52px;text-align:center;position:relative;overflow:hidden;
 }
-.welcome-hero::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;top:-80px;right:-60px;background:rgba(122,158,50,.15);}
-.welcome-hero::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;bottom:-40px;left:5%;background:rgba(224,120,32,.1);}
-.hero-badge{
-  display:inline-block;padding:5px 16px;border-radius:20px;
-  background:rgba(240,232,204,.12);border:1px solid rgba(240,232,204,.3);
+.welcome-hero::before{
+  content:'';position:absolute;width:340px;height:340px;border-radius:50%;
+  top:-100px;right:-80px;background:rgba(122,158,50,.18);
+}
+.welcome-hero::after{
+  content:'';position:absolute;width:200px;height:200px;border-radius:50%;
+  bottom:-50px;left:0%;background:rgba(224,120,32,.12);
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 18px;border-radius:30px;
+  background:rgba(240,232,204,.13);border:1px solid rgba(240,232,204,.28);
   color:var(--cr);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  margin-bottom:20px;position:relative;z-index:1;
+  margin-bottom:22px;position:relative;z-index:1;
 }
+.hero-eyebrow::before{content:'✦';font-size:8px;opacity:.8;}
 .welcome-hero h1{
-  font-size:clamp(26px,6vw,46px);font-weight:800;color:#fff;
-  line-height:1.1;margin-bottom:10px;position:relative;z-index:1;
+  font-size:clamp(28px,7vw,52px);font-weight:800;color:#fff;
+  line-height:1.05;margin-bottom:8px;position:relative;z-index:1;
 }
-.welcome-hero h1 span{color:var(--cr);font-style:italic;font-weight:300;display:block;font-size:.6em;}
-.welcome-sub{font-size:15px;color:rgba(255,255,255,.75);line-height:1.7;max-width:520px;margin:0 auto 32px;position:relative;z-index:1;}
-
-.welcome-body{max-width:700px;margin:0 auto;padding:40px 24px 60px;}
+.welcome-hero h1 .sub{
+  display:block;font-size:.48em;font-weight:300;color:rgba(240,232,204,.85);
+  letter-spacing:.5px;margin-top:6px;font-style:italic;
+}
+.hero-quote{
+  margin:20px auto 0;max-width:320px;position:relative;z-index:1;
+  color:rgba(255,255,255,.72);font-size:13px;line-height:1.6;font-style:italic;
+}
+.welcome-body{padding:32px 20px 48px;max-width:520px;margin:0 auto;}
 .welcome-intro{
-  background:#fff;border-radius:var(--radio);border:1px solid var(--cr2);
-  padding:28px 32px;margin-bottom:24px;
+  background:var(--card-bg);border-radius:16px;
+  padding:24px 22px;border-left:4px solid var(--na);
+  box-shadow:0 2px 20px var(--shadow);margin-bottom:24px;
 }
-.welcome-intro p{font-size:15px;line-height:1.8;color:var(--ts);margin-bottom:16px;}
-.welcome-intro p:last-child{margin-bottom:0;}
-.conf-box{
-  background:rgba(61,80,22,.05);border-left:3px solid var(--v2);
-  padding:16px 20px;border-radius:0 8px 8px 0;margin-top:16px;
+.welcome-intro p{font-size:15px;line-height:1.75;color:var(--ts);}
+.welcome-intro p strong{color:var(--v1);font-weight:700;}
+.time-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(61,80,22,.07);border-radius:8px;
+  padding:8px 14px;font-size:12px;color:var(--ts);margin-bottom:24px;
 }
-.conf-box .conf-label{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--v2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
-.conf-box p{font-size:13px;color:var(--ts);line-height:1.7;}
+.time-badge svg{opacity:.6;}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;}
+.pillar{
+  background:var(--card-bg);border-radius:12px;padding:14px;
+  border:1px solid rgba(86,122,34,.18);text-align:center;
+  box-shadow:0 1px 8px var(--shadow);
+}
+.pillar-icon{font-size:22px;margin-bottom:6px;}
+.pillar-name{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:var(--v1);letter-spacing:.5px;text-transform:uppercase;}
+.pillar-desc{font-size:11px;color:var(--tl);margin-top:2px;line-height:1.4;}
+.btn-start{
+  display:block;width:100%;padding:18px 24px;
+  background:linear-gradient(135deg,var(--v2),var(--v1));
+  color:#fff;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;
+  border:none;border-radius:14px;cursor:pointer;letter-spacing:.5px;
+  box-shadow:0 6px 24px rgba(61,80,22,.35);
+  transition:transform .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.btn-start::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,.1));
+}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(61,80,22,.4);}
+.btn-start:active{transform:translateY(0);}
 
-.sections-preview{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:32px;}
-@media(max-width:500px){.sections-preview{grid-template-columns:1fr;}}
-.sp-card{
-  background:#fff;border-radius:var(--radio);border:1px solid var(--cr2);
-  padding:18px 20px;display:flex;align-items:flex-start;gap:14px;
+/* ═══════════════════════════
+   FORM SCREENS
+═══════════════════════════ */
+.form-screen{background:var(--bl);padding-bottom:80px;}
+.section-hero{
+  background:linear-gradient(135deg,var(--v1),var(--v2));
+  padding:28px 20px 24px;text-align:center;
 }
-.sp-num{
-  width:36px;height:36px;border-radius:50%;background:var(--v1);
-  color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:14px;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+.section-num{
+  display:inline-block;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);
+  color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;
+  line-height:32px;margin-bottom:12px;
 }
-.sp-text h4{font-size:13px;font-weight:700;color:var(--v1);margin-bottom:3px;}
-.sp-text p{font-size:12px;color:var(--ts);line-height:1.5;}
+.section-hero h2{font-size:20px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:6px;}
+.section-hero p{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;}
+.form-body{padding:20px 20px 0;max-width:560px;margin:0 auto;}
 
-.btn-primary{
-  display:block;width:100%;max-width:380px;margin:0 auto;
-  background:var(--na);color:#fff;border:none;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;
-  padding:18px 32px;border-radius:var(--radio);letter-spacing:.5px;
-  transition:all .25s;box-shadow:0 4px 20px rgba(224,120,32,.35);
+/* Question blocks */
+.q-block{margin-bottom:22px;}
+.q-label{
+  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+  color:var(--v1);margin-bottom:10px;line-height:1.4;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.q-label .q-num{
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;
+  background:var(--v2);color:#fff;font-size:10px;
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.q-sub{font-size:12px;color:var(--tl);font-weight:400;font-family:'Lato',sans-serif;margin-bottom:10px;margin-left:30px;}
+
+/* Card options */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.card-grid.cols-1{grid-template-columns:1fr;}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.opt-card{
+  background:var(--card-bg);border-radius:12px;
+  border:2px solid rgba(86,122,34,.2);padding:12px 10px;
+  cursor:pointer;text-align:center;transition:all .2s;
+  position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.opt-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--v2),var(--v3));
+  opacity:0;transition:opacity .2s;
+}
+.opt-card.selected{
+  border-color:var(--v2);
+  box-shadow:0 4px 16px rgba(86,122,34,.25);
+  transform:translateY(-2px);
+}
+.opt-card.selected::before{opacity:.06;}
+.opt-card.selected .opt-check{opacity:1;transform:scale(1);}
+.opt-card-icon{font-size:24px;margin-bottom:6px;position:relative;z-index:1;}
+.opt-card-text{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:var(--tx);line-height:1.3;position:relative;z-index:1;}
+.opt-card-sub{font-size:10px;color:var(--tl);margin-top:3px;line-height:1.3;position:relative;z-index:1;}
+.opt-check{
+  position:absolute;top:6px;right:6px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--v2);color:#fff;
+  font-size:10px;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.5);transition:all .2s;
+}
+
+/* Emotion chips */
+.emotion-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.e-chip{
+  padding:8px 14px;border-radius:30px;
+  background:var(--card-bg);border:1.5px solid rgba(86,122,34,.2);
+  font-size:12px;color:var(--ts);cursor:pointer;
+  transition:all .2s;-webkit-tap-highlight-color:transparent;
+  font-family:'Lato',sans-serif;
+}
+.e-chip.selected{
+  background:var(--v1);color:#fff;border-color:var(--v1);
+  box-shadow:0 3px 10px rgba(61,80,22,.3);
+}
+.e-chip .chip-icon{margin-right:4px;}
+
+/* Intensity slider */
+.intensity-wrap{padding:4px 0 12px;}
+.intensity-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--tl);margin-bottom:8px;font-family:'Lato',sans-serif;}
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:6px;
+  border-radius:3px;background:linear-gradient(90deg,var(--v3),var(--na));
+  outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:var(--v1);border:3px solid #fff;
+  box-shadow:0 2px 8px rgba(61,80,22,.35);cursor:pointer;
+}
+.intensity-val{
+  text-align:center;font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;
+  color:var(--v1);margin-top:8px;
+}
+.intensity-desc{text-align:center;font-size:11px;color:var(--tl);margin-top:2px;}
+
+/* Text area */
+.q-textarea{
+  width:100%;padding:14px 16px;border-radius:12px;
+  border:2px solid rgba(86,122,34,.2);background:var(--card-bg);
+  font-family:'Lato',sans-serif;font-size:13px;color:var(--tx);
+  resize:none;outline:none;transition:border-color .2s;line-height:1.6;
+}
+.q-textarea:focus{border-color:var(--v2);}
+.q-textarea::placeholder{color:var(--tl);}
+
+/* Nav buttons */
+.btn-nav-row{
+  display:grid;grid-template-columns:1fr 2fr;gap:10px;
+  padding:20px 20px 0;max-width:560px;margin:0 auto;
+}
+.btn-back{
+  padding:14px;border-radius:12px;border:2px solid rgba(61,80,22,.2);
+  background:transparent;color:var(--ts);font-family:'Montserrat',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+}
+.btn-back:hover{background:rgba(61,80,22,.06);}
+.btn-next{
+  padding:14px 20px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--v2),var(--v1));
+  color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;letter-spacing:.3px;
+  box-shadow:0 4px 16px rgba(61,80,22,.3);transition:all .2s;
+}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(61,80,22,.38);}
+.btn-next:active{transform:none;}
+.btn-next:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+
+/* Divider */
+.q-divider{height:1px;background:rgba(86,122,34,.12);margin:18px 0;}
+
+/* ═══════════════════════════
+   LOADING SCREEN
+═══════════════════════════ */
+#s-loading{
+  background:linear-gradient(150deg,var(--v1),var(--v2));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;text-align:center;padding:40px 24px;
+}
+#s-loading h2{font-size:22px;color:#fff;margin-bottom:8px;}
+#s-loading p{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;max-width:300px;}
+.loader-ring{
+  width:72px;height:72px;border-radius:50%;
+  border:4px solid rgba(255,255,255,.15);
+  border-top-color:rgba(255,255,255,.85);
+  animation:spin 1s linear infinite;
+  margin:0 auto 24px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-steps{margin-top:28px;text-align:left;width:100%;max-width:280px;}
+.loading-step{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;color:rgba(255,255,255,.6);font-size:12px;
+  transition:color .4s;
+}
+.loading-step.done{color:rgba(255,255,255,.9);}
+.step-dot{
+  width:20px;height:20px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:9px;transition:all .4s;
+}
+.loading-step.done .step-dot{background:var(--na);border-color:var(--na);color:#fff;}
+
+/* ═══════════════════════════
+   RESULTS SCREEN
+═══════════════════════════ */
+#s-results{background:var(--bl);}
+.results-hero{
+  background:linear-gradient(150deg,var(--v1) 0%,var(--v2) 60%,#8aaa3a 100%);
+  padding:40px 24px 36px;text-align:center;position:relative;overflow:hidden;
+}
+.results-hero::before{content:'';position:absolute;width:260px;height:260px;border-radius:50%;top:-80px;right:-60px;background:rgba(255,255,255,.07);}
+.results-hero-badge{
+  display:inline-block;padding:5px 16px;border-radius:20px;
+  background:rgba(240,232,204,.15);border:1px solid rgba(240,232,204,.3);
+  color:var(--cr);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:14px;position:relative;z-index:1;
+}
+.results-hero h2{font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;position:relative;z-index:1;}
+.results-hero .hero-name{font-size:28px;color:var(--cr);font-weight:800;position:relative;z-index:1;}
+.results-hero p{font-size:12px;color:rgba(255,255,255,.7);position:relative;z-index:1;margin-top:6px;}
+.results-body{padding:20px 18px 60px;max-width:560px;margin:0 auto;}
+
+/* Radar chart */
+.radar-wrap{
+  background:var(--card-bg);border-radius:18px;
+  padding:24px 16px;margin-bottom:18px;
+  box-shadow:0 2px 20px var(--shadow);border:1px solid rgba(86,122,34,.12);
   text-align:center;
 }
-.btn-primary:hover{background:#c96a1a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(224,120,32,.45);}
-.btn-secondary{
-  display:inline-flex;align-items:center;gap:8px;
-  background:transparent;border:2px solid var(--v1);color:var(--v1);
-  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
-  padding:12px 24px;border-radius:var(--radio);cursor:pointer;
-  transition:all .2s;
-}
-.btn-secondary:hover{background:var(--v1);color:#fff;}
+.radar-title{font-size:12px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+#radarCanvas{max-width:280px;margin:0 auto;display:block;}
 
-/* ─── FORM SCREENS ─── */
-.form-nav{background:var(--v1);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
-.form-brand{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#fff;}
-.form-step-indicator{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;}
+/* Dimension cards */
+.dim-card{
+  background:var(--card-bg);border-radius:16px;
+  padding:18px 18px;margin-bottom:12px;
+  box-shadow:0 2px 14px var(--shadow);
+  border:1px solid rgba(86,122,34,.12);
+  position:relative;overflow:hidden;
+}
+.dim-card.primary{
+  border-color:var(--na);
+  box-shadow:0 4px 20px rgba(224,120,32,.2);
+}
+.dim-card.primary::before{
+  content:'FOCO PRINCIPAL';position:absolute;top:0;right:0;
+  background:var(--na);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;
+  padding:4px 10px;border-radius:0 16px 0 10px;
+}
+.dim-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.dim-icon{font-size:28px;flex-shrink:0;}
+.dim-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--v1);}
+.dim-subtitle{font-size:11px;color:var(--tl);margin-top:1px;}
+.dim-bar-wrap{margin-bottom:10px;}
+.dim-bar-bg{height:8px;background:rgba(86,122,34,.12);border-radius:4px;overflow:hidden;}
+.dim-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--v3),var(--na));transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+.dim-score{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:var(--v2);text-align:right;margin-top:4px;}
+.dim-insight{font-size:12px;color:var(--ts);line-height:1.65;border-left:3px solid var(--cr2);padding-left:10px;}
 
-.progress-bar{height:4px;background:rgba(240,232,204,.2);}
-.progress-fill{height:100%;background:var(--na);transition:width .4s ease;}
+/* Message card */
+.msg-card{
+  background:linear-gradient(135deg,var(--v1),var(--v2));
+  border-radius:18px;padding:24px 20px;margin-bottom:18px;
+  position:relative;overflow:hidden;
+}
+.msg-card::before{content:'"';position:absolute;top:-10px;left:14px;font-size:100px;color:rgba(255,255,255,.06);font-family:'Montserrat',sans-serif;line-height:1;}
+.msg-from{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.msg-text{font-size:14px;color:#fff;line-height:1.8;font-style:italic;position:relative;z-index:1;}
+.msg-sign{margin-top:14px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:var(--cr);opacity:.85;}
 
-.form-body{max-width:700px;margin:0 auto;padding:32px 24px 60px;}
-.section-header{margin-bottom:28px;}
-.section-num{
-  display:inline-flex;align-items:center;gap:10px;
-  background:var(--v1);color:#fff;
-  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;
-  padding:5px 14px 5px 5px;border-radius:20px;margin-bottom:12px;
+/* Service recommendation */
+.service-card{
+  background:var(--card-bg);border-radius:16px;padding:20px 18px;
+  margin-bottom:12px;border:2px solid var(--v2);
+  box-shadow:0 4px 20px rgba(86,122,34,.18);
 }
-.section-num .s-circle{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:13px;}
-.section-header h2{font-size:clamp(20px,4vw,26px);font-weight:800;color:var(--v1);margin-bottom:6px;}
-.section-header p{font-size:14px;color:var(--ts);line-height:1.7;}
+.service-tag{
+  display:inline-block;padding:4px 12px;border-radius:20px;
+  background:var(--v2);color:#fff;font-size:10px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;
+}
+.service-name{font-size:17px;font-weight:800;color:var(--v1);margin-bottom:6px;}
+.service-desc{font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px;}
+.service-details{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.s-detail{
+  background:rgba(86,122,34,.1);border-radius:8px;
+  padding:6px 12px;font-size:11px;color:var(--v1);font-weight:600;
+}
+.service-tools{margin-bottom:16px;}
+.service-tools-title{font-size:11px;font-weight:700;color:var(--tl);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;}
+.tool-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.tool-chip{
+  padding:5px 12px;border-radius:20px;font-size:11px;
+  background:var(--cr2);color:var(--v1);font-weight:600;border:1px solid rgba(86,122,34,.2);
+}
+.btn-wsp{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  padding:15px 20px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#25D366,#128C7E);
+  color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.35);
+  transition:all .2s;text-decoration:none;
+}
+.btn-wsp:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(37,211,102,.42);}
 
-.form-card{background:#fff;border-radius:var(--radio);border:1px solid var(--cr2);padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(61,80,22,.06);}
-.form-group{margin-bottom:20px;}
-.form-group:last-child{margin-bottom:0;}
-.form-label{
-  display:block;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
-  text-transform:uppercase;letter-spacing:1.5px;color:var(--v2);margin-bottom:8px;
+/* Steps */
+.steps-card{
+  background:var(--card-bg);border-radius:16px;padding:20px 18px;
+  margin-bottom:18px;border:1px solid rgba(86,122,34,.12);
+  box-shadow:0 2px 14px var(--shadow);
 }
-.form-label .hint{font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--ts);opacity:.7;font-style:italic;}
-.form-input,.form-textarea,.form-select{
-  width:100%;padding:12px 16px;
-  border:1.5px solid var(--cr2);border-radius:8px;
-  font-family:'Lato',sans-serif;font-size:14px;color:var(--tx);
-  background:var(--bl);transition:border-color .2s,box-shadow .2s;outline:none;
+.steps-title{font-size:12px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+.step-item{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
+.step-item:last-child{margin-bottom:0;}
+.step-num{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  background:var(--v1);color:#fff;font-family:'Montserrat',sans-serif;
+  font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
 }
-.form-input:focus,.form-textarea:focus,.form-select:focus{
-  border-color:var(--v2);box-shadow:0 0 0 3px rgba(86,122,34,.12);
-}
-.form-textarea{resize:vertical;min-height:90px;line-height:1.6;}
-.form-textarea.tall{min-height:120px;}
-.form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:500px){.form-grid2{grid-template-columns:1fr;}}
+.step-content .step-head{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--v1);}
+.step-content .step-body{font-size:12px;color:var(--ts);line-height:1.6;margin-top:2px;}
 
-/* Sensorial sub-fields */
-.sensorial-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;}
-@media(max-width:500px){.sensorial-grid{grid-template-columns:1fr;}}
-.sensorial-item label{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;}
-.sensorial-item label .icon{margin-right:4px;}
-
-/* Radio group */
-.radio-group{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
-.radio-option{
-  display:flex;align-items:center;gap:12px;
-  background:var(--bl);border:1.5px solid var(--cr2);border-radius:8px;
-  padding:12px 16px;cursor:pointer;transition:all .2s;
-}
-.radio-option:hover{border-color:var(--v2);background:rgba(86,122,34,.04);}
-.radio-option.selected{border-color:var(--v2);background:rgba(86,122,34,.06);}
-.radio-option input[type=radio]{accent-color:var(--v2);width:16px;height:16px;flex-shrink:0;}
-.radio-option span{font-size:14px;color:var(--tx);}
-
-/* Form actions */
-.form-actions{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:28px;flex-wrap:wrap;}
-.btn-back{
-  background:transparent;border:none;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;
-  color:var(--ts);display:flex;align-items:center;gap:6px;padding:8px;
-  transition:color .2s;
-}
-.btn-back:hover{color:var(--v1);}
-.btn-next{
-  background:var(--v1);color:#fff;border:none;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;
-  padding:14px 32px;border-radius:var(--radio);letter-spacing:.5px;
-  transition:all .2s;box-shadow:0 4px 16px rgba(61,80,22,.25);
-  display:flex;align-items:center;gap:8px;
-}
-.btn-next:hover{background:var(--v2);transform:translateY(-1px);}
-.btn-finish{background:var(--na);box-shadow:0 4px 16px rgba(224,120,32,.3);}
-.btn-finish:hover{background:#c96a1a;}
-
-/* ─── RESULTS SCREEN ─── */
-#s-resultado{background:var(--cr);}
-.result-hero{
-  background:linear-gradient(135deg,var(--v1) 0%,var(--v2) 100%);
-  padding:48px 24px 40px;text-align:center;
-}
-.result-check{
-  width:64px;height:64px;border-radius:50%;background:rgba(240,232,204,.2);
-  border:2px solid rgba(240,232,204,.4);display:flex;align-items:center;justify-content:center;
-  font-size:28px;margin:0 auto 20px;
-}
-.result-hero h1{font-size:clamp(20px,4vw,28px);color:#fff;font-weight:800;margin-bottom:8px;}
-.result-hero p{font-size:14px;color:rgba(255,255,255,.75);max-width:480px;margin:0 auto;}
-
-.result-body{max-width:700px;margin:0 auto;padding:32px 24px 60px;}
-.result-section{background:#fff;border-radius:var(--radio);border:1px solid var(--cr2);margin-bottom:20px;overflow:hidden;}
-.result-section-header{
-  background:var(--v1);padding:14px 20px;
-  display:flex;align-items:center;gap:12px;
-}
-.result-section-header .rs-num{
-  width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);
-  font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;color:#fff;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.result-section-header h3{font-size:13px;font-weight:700;color:#fff;letter-spacing:.5px;}
-.result-section-body{padding:20px;}
-.result-field{border-bottom:1px solid var(--cr2);padding:12px 0;}
-.result-field:last-child{border-bottom:none;}
-.result-field-label{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--v2);margin-bottom:5px;}
-.result-field-value{font-size:14px;color:var(--tx);line-height:1.7;}
-.result-field-value.empty{color:var(--ts);font-style:italic;opacity:.6;}
-
-.result-actions{display:flex;flex-direction:column;gap:14px;margin-top:28px;}
+/* Share row */
+.share-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
 .btn-share{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  background:var(--na);color:#fff;border:none;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;
-  padding:16px 24px;border-radius:var(--radio);
-  transition:all .2s;box-shadow:0 4px 16px rgba(224,120,32,.3);
+  padding:13px 10px;border-radius:12px;border:2px solid rgba(86,122,34,.2);
+  background:var(--card-bg);color:var(--v1);font-family:'Montserrat',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;text-align:center;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.btn-share:hover{background:#c96a1a;transform:translateY(-1px);}
-.btn-wa{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  background:#25d366;color:#fff;border:none;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;
-  padding:16px 24px;border-radius:var(--radio);
-  transition:all .2s;box-shadow:0 4px 16px rgba(37,211,102,.3);
-}
-.btn-wa:hover{background:#1ea355;transform:translateY(-1px);}
-.btn-nuevo{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  background:transparent;border:2px solid var(--v1);color:var(--v1);
-  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
-  padding:14px 24px;border-radius:var(--radio);cursor:pointer;transition:all .2s;
-}
-.btn-nuevo:hover{background:var(--v1);color:#fff;}
+.btn-share:hover{background:rgba(86,122,34,.08);border-color:var(--v2);}
 
 /* Toast */
-.toast{
+#toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--v1);color:#fff;padding:12px 24px;border-radius:var(--radio);
-  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;
-  box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9999;
-  transition:transform .3s ease;pointer-events:none;
+  background:var(--v1);color:#fff;padding:12px 22px;border-radius:30px;
+  font-size:13px;font-weight:600;z-index:9999;transition:transform .35s cubic-bezier(.22,1,.36,1);
+  white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.25);
 }
-.toast.show{transform:translateX(-50%) translateY(0);}
+#toast.show{transform:translateX(-50%) translateY(0);}
 
-/* Readonly view banner */
+/* Read-only banner */
 .readonly-banner{
-  background:var(--na);padding:10px 24px;text-align:center;
+  background:linear-gradient(135deg,var(--na),var(--rj));
+  padding:12px 20px;text-align:center;
   font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:#fff;
   letter-spacing:.5px;
 }
 
-/* Tag verde decorativo */
-.tag-decorativo{
-  display:inline-block;background:rgba(86,122,34,.1);border:1px solid rgba(86,122,34,.25);
-  color:var(--v2);font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:12px;
+/* View-only mode adjustments */
+.view-only .btn-wsp,.view-only .share-row{display:none!important;}
+.view-only .readonly-note{display:block!important;}
+.readonly-note{
+  display:none;text-align:center;padding:14px 20px;
+  font-size:12px;color:var(--tl);background:rgba(86,122,34,.06);
+  border-radius:10px;margin-bottom:18px;
+}
+
+/* Prices */
+.price-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.price-item{
+  flex:1;min-width:140px;background:rgba(61,80,22,.06);
+  border-radius:10px;padding:12px 14px;border:1px solid rgba(86,122,34,.15);
+}
+.price-item .price-label{font-size:10px;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;}
+.price-item .price-val{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;color:var(--v1);}
+.price-item .price-desc{font-size:10px;color:var(--tl);margin-top:2px;}
+
+@media(max-width:360px){
+  .card-grid{grid-template-columns:1fr;}
+  .pillars{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
 
-<!-- ════════ WELCOME ════════ -->
+<!-- PROGRESS BAR -->
+<div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
+
+<!-- TOAST -->
+<div id="toast">✓ Enlace copiado</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 0: WELCOME
+═══════════════════════════════════ -->
 <div id="s-welcome" class="screen active">
   <div class="welcome-hero">
-    <div class="hero-badge">Arte y Bienestar · Diagnóstico Inicial</div>
-    <h1>Despierta tu esencia,<span>transforma tu mundo</span></h1>
-    <p class="welcome-sub">Este diagnóstico nos ayudará a conocerte mejor y a co-crear una experiencia de mentoría tan única como tú.</p>
+    <div class="hero-eyebrow fade-in">Simoné Arte y Naturaleza</div>
+    <h1 class="fade-in fade-in-d1">Diagnóstico<br>Inicial<br><span class="sub">Mentoría Individual</span></h1>
+    <p class="hero-quote fade-in fade-in-d2">«Antes de transformar, necesitamos ver con claridad desde dónde partes.»</p>
   </div>
   <div class="welcome-body">
-    <div class="welcome-intro">
-      <div class="tag-decorativo">¡Bienvenido(a)!</div>
-      <p>Este formulario nos ayudará a conocerte mejor y a entender tus expectativas para que tu experiencia de mentoría sea tan única y transformadora como tú. Tómate tu tiempo para responder con sinceridad; no hay respuestas correctas o incorrectas.</p>
-      <div class="conf-box">
-        <div class="conf-label">🔒 Nota de Confidencialidad</div>
-        <p>Tu privacidad es nuestra prioridad. Toda la información que compartas en este formulario y durante tu proceso de mentoría es estrictamente confidencial y forma parte de la reserva de tu proceso personal. No será divulgada a terceros bajo ninguna circunstancia, a menos que exista una solicitud expresa y por escrito de tu parte.</p>
-      </div>
+    <div class="welcome-intro fade-in">
+      <p>Hola. Soy <strong>Nathalia Velasco</strong>, y este espacio es tuyo.<br><br>
+      Este diagnóstico me ayuda a conocerte antes de nuestra primera sesión — tu estado emocional, lo que quieres transformar y cómo conectas con tu proceso de cambio.<br><br>
+      <strong>No hay respuestas correctas o incorrectas.</strong> Solo tu verdad.</p>
     </div>
-
-    <div class="sections-preview">
-      <div class="sp-card"><div class="sp-num">1</div><div class="sp-text"><h4>Datos Personales</h4><p>Información básica de contacto</p></div></div>
-      <div class="sp-card"><div class="sp-num">2</div><div class="sp-text"><h4>Visión de Transformación</h4><p>¿Qué deseas explorar y cambiar?</p></div></div>
-      <div class="sp-card"><div class="sp-num">3</div><div class="sp-text"><h4>Fortalezas y Sensibilidades</h4><p>Tus herramientas y preferencias</p></div></div>
-      <div class="sp-card"><div class="sp-num">4</div><div class="sp-text"><h4>Preferencias de Sesiones</h4><p>Disponibilidad y modalidades</p></div></div>
+    <div class="time-badge fade-in fade-in-d1">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      5 – 8 minutos · Guardado automáticamente
     </div>
-
-    <button class="btn-primary" onclick="irA('s-sec1')">Comenzar mi diagnóstico →</button>
+    <div class="pillars fade-in fade-in-d2">
+      <div class="pillar"><div class="pillar-icon">💚</div><div class="pillar-name">Emocional</div><div class="pillar-desc">Estado y bienestar interior</div></div>
+      <div class="pillar"><div class="pillar-icon">🗣️</div><div class="pillar-name">Comunicacional</div><div class="pillar-desc">Expresión y vínculos</div></div>
+      <div class="pillar"><div class="pillar-icon">✨</div><div class="pillar-name">Espiritual</div><div class="pillar-desc">Propósito y conexión</div></div>
+      <div class="pillar"><div class="pillar-icon">🧠</div><div class="pillar-name">Cognitivo</div><div class="pillar-desc">Creatividad y claridad</div></div>
+    </div>
+    <button class="btn-start fade-in fade-in-d3" onclick="startDiag()">Comenzar mi diagnóstico →</button>
   </div>
 </div>
 
-<!-- ════════ SECCIÓN 1: DATOS PERSONALES ════════ -->
-<div id="s-sec1" class="screen">
-  <div class="nav">
-    <div class="nav-brand">Nathalia Velasco<span>Mentoría Individual</span></div>
-    <div class="nav-step">Paso 1 de 4</div>
+<!-- ═══════════════════════════════════
+     SCREEN 1: DATOS PERSONALES
+═══════════════════════════════════ -->
+<div id="s-1" class="screen form-screen">
+  <div id="topnav-1" class="topnav">
+    <div class="topnav-brand">Simoné<em>Arte y Naturaleza</em></div>
+    <div class="topnav-step">Paso 1 de 4</div>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
+  <div class="section-hero">
+    <div class="section-num">1</div>
+    <h2>Cuéntame sobre ti</h2>
+    <p>Datos básicos para personalizar tu diagnóstico</p>
+  </div>
   <div class="form-body">
-    <div class="section-header">
-      <div class="section-num"><div class="s-circle">1</div> Datos Personales</div>
-      <h2>¿Quién eres?</h2>
-      <p>Cuéntanos un poco sobre ti para poder contactarte y personalizar tu proceso.</p>
+    <div class="q-block fade-in">
+      <div class="q-label"><span class="q-num">1</span> ¿Cuál es tu nombre?</div>
+      <input id="f-nombre" type="text" class="q-textarea" style="resize:none;height:48px;padding:12px 16px;" placeholder="Tu nombre completo…" oninput="autoSave()"/>
     </div>
-    <div class="form-card">
-      <div class="form-group">
-        <label class="form-label">Nombre Completo *</label>
-        <input id="f-nombre" class="form-input" type="text" placeholder="Tu nombre completo"/>
+    <div class="q-block fade-in fade-in-d1">
+      <div class="q-label"><span class="q-num">2</span> ¿Cuántos años tienes?</div>
+      <div class="card-grid cols-3">
+        <div class="opt-card" onclick="selectSingle(this,'f-edad','18-28')"><div class="opt-check">✓</div><div class="opt-card-icon">🌱</div><div class="opt-card-text">18 – 28</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-edad','29-38')"><div class="opt-check">✓</div><div class="opt-card-icon">🌿</div><div class="opt-card-text">29 – 38</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-edad','39-48')"><div class="opt-check">✓</div><div class="opt-card-icon">🍃</div><div class="opt-card-text">39 – 48</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-edad','49-58')"><div class="opt-check">✓</div><div class="opt-card-icon">🌳</div><div class="opt-card-text">49 – 58</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-edad','59+')"><div class="opt-check">✓</div><div class="opt-card-icon">🌲</div><div class="opt-card-text">59 +</div></div>
       </div>
-      <div class="form-grid2">
-        <div class="form-group">
-          <label class="form-label">Fecha de Nacimiento</label>
-          <input id="f-fecha" class="form-input" type="date"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">WhatsApp *</label>
-          <input id="f-whatsapp" class="form-input" type="tel" placeholder="3XX XXX XXXX"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email de Contacto *</label>
-        <input id="f-email" class="form-input" type="email" placeholder="tu@correo.com"/>
-      </div>
+      <input type="hidden" id="f-edad"/>
     </div>
-    <div class="form-actions">
-      <button class="btn-back" onclick="irA('s-welcome')">← Volver</button>
-      <button class="btn-next" onclick="siguienteSec('s-sec1','s-sec2')">Continuar →</button>
+    <div class="q-block fade-in fade-in-d2">
+      <div class="q-label"><span class="q-num">3</span> ¿Cómo te enteraste de Simoné?</div>
+      <div class="card-grid">
+        <div class="opt-card" onclick="selectSingle(this,'f-canal','Instagram')"><div class="opt-check">✓</div><div class="opt-card-icon">📱</div><div class="opt-card-text">Instagram</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-canal','Recomendación')"><div class="opt-check">✓</div><div class="opt-card-icon">🤝</div><div class="opt-card-text">Me recomendaron</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-canal','Búsqueda web')"><div class="opt-check">✓</div><div class="opt-card-icon">🔍</div><div class="opt-card-text">Búsqueda web</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-canal','Evento o taller')"><div class="opt-check">✓</div><div class="opt-card-icon">🎨</div><div class="opt-card-text">Evento / Taller</div></div>
+      </div>
+      <input type="hidden" id="f-canal"/>
     </div>
+  </div>
+  <div class="btn-nav-row">
+    <button class="btn-back" onclick="goScreen('s-welcome')">← Volver</button>
+    <button class="btn-next" onclick="nextFrom1()">Continuar →</button>
   </div>
 </div>
 
-<!-- ════════ SECCIÓN 2: VISIÓN DE TRANSFORMACIÓN ════════ -->
-<div id="s-sec2" class="screen">
-  <div class="nav">
-    <div class="nav-brand">Nathalia Velasco<span>Mentoría Individual</span></div>
-    <div class="nav-step">Paso 2 de 4</div>
+<!-- ═══════════════════════════════════
+     SCREEN 2: ESTADO EMOCIONAL
+═══════════════════════════════════ -->
+<div id="s-2" class="screen form-screen">
+  <div class="topnav">
+    <div class="topnav-brand">Simoné<em>Arte y Naturaleza</em></div>
+    <div class="topnav-step">Paso 2 de 4</div>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+  <div class="section-hero" style="background:linear-gradient(135deg,#4a6318,var(--v2));">
+    <div class="section-num">2</div>
+    <h2>Tu mundo interior</h2>
+    <p>Cómo te encuentras emocionalmente hoy</p>
+  </div>
   <div class="form-body">
-    <div class="section-header">
-      <div class="section-num"><div class="s-circle">2</div> Tu Visión de Transformación</div>
-      <h2>¿Qué deseas explorar?</h2>
-      <p>Cuéntanos qué aspectos de tu vida deseas transformar. Sé lo más específico posible.</p>
+    <div class="q-block fade-in">
+      <div class="q-label"><span class="q-num">4</span> En este momento, ¿cómo describirías tu estado emocional?</div>
+      <p class="q-sub">Selecciona todas las que resuenen contigo</p>
+      <div class="emotion-chips" id="chips-estado">
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">😰</span> Ansioso / Estresado</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">😶‍🌫️</span> Bloqueado / Sin dirección</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">🥱</span> Agotado / Quemado</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">😔</span> Triste / Desconectado</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">🤯</span> Sobrecargado / Muchas ideas</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">🌀</span> Confundido / En transición</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">🌿</span> Estable / Buscando crecer</div>
+        <div class="e-chip" onclick="toggleChip(this,'f-estado-em')"><span class="chip-icon">✨</span> Motivado / Con energía</div>
+      </div>
+      <input type="hidden" id="f-estado-em"/>
     </div>
-    <div class="form-card">
-      <div class="form-group">
-        <label class="form-label">🌊 A nivel Emocional <span class="hint">— gestionar el estrés, liberar la ansiedad, expresar emociones, conectar con la alegría...</span></label>
-        <textarea id="f-emocional" class="form-textarea" placeholder="Escribe aquí lo que deseas trabajar a nivel emocional..."></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">💬 A nivel Comunicacional <span class="hint">— expresar ideas con claridad, poner límites, mejorar relaciones, hablar en público...</span></label>
-        <textarea id="f-comunicacional" class="form-textarea" placeholder="¿Qué cambios buscas en tu comunicación?"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">✨ A nivel Espiritual <span class="hint">— encontrar mi propósito, sentirme más conectado(a), cultivar paz interior, entender mi intuición...</span></label>
-        <textarea id="f-espiritual" class="form-textarea" placeholder="¿Cómo deseas conectar con tu dimensión espiritual?"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">🧠 A nivel Cognitivo / Mental <span class="hint">— superar bloqueos creativos, mejorar concentración, manejar pensamientos negativos, desarrollar nuevas ideas...</span></label>
-        <textarea id="f-cognitivo" class="form-textarea" placeholder="¿Qué bloqueos mentales deseas transformar?"></textarea>
-      </div>
-    </div>
-    <div class="form-card">
-      <div class="form-group">
-        <label class="form-label">🌱 ¿Cuál es la motivación principal que te impulsa a iniciar este proceso de mentoría <em>ahora</em>?</label>
-        <textarea id="f-motivacion" class="form-textarea tall" placeholder="Comparte libremente qué te trajo aquí en este momento de tu vida..."></textarea>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d1">
+      <div class="q-label"><span class="q-num">5</span> ¿Qué tan urgente sientes la necesidad de un cambio?</div>
+      <div class="intensity-wrap">
+        <div class="intensity-labels"><span>Puedo esperar</span><span>Es urgente ahora</span></div>
+        <input type="range" id="slider-urgencia" min="1" max="10" value="5" oninput="updateSlider('urgencia')" onchange="autoSave()"/>
+        <div class="intensity-val" id="val-urgencia">5</div>
+        <div class="intensity-desc" id="desc-urgencia">Moderado</div>
       </div>
     </div>
-    <div class="form-actions">
-      <button class="btn-back" onclick="irA('s-sec1')">← Volver</button>
-      <button class="btn-next" onclick="irA('s-sec3')">Continuar →</button>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d2">
+      <div class="q-label"><span class="q-num">6</span> ¿Qué área de tu vida sientes que más necesita atención?</div>
+      <div class="card-grid">
+        <div class="opt-card" onclick="selectSingle(this,'f-area','Emocional / Mental')"><div class="opt-check">✓</div><div class="opt-card-icon">💚</div><div class="opt-card-text">Emocional / Mental</div><div class="opt-card-sub">Paz interior, emociones</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-area','Relaciones y vínculos')"><div class="opt-check">✓</div><div class="opt-card-icon">🤝</div><div class="opt-card-text">Relaciones</div><div class="opt-card-sub">Familia, pareja, trabajo</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-area','Propósito y dirección')"><div class="opt-check">✓</div><div class="opt-card-icon">🧭</div><div class="opt-card-text">Propósito</div><div class="opt-card-sub">Rumbo, significado</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-area','Creatividad y expresión')"><div class="opt-check">✓</div><div class="opt-card-icon">🎨</div><div class="opt-card-text">Creatividad</div><div class="opt-card-sub">Expresión, bloqueos</div></div>
+      </div>
+      <input type="hidden" id="f-area"/>
     </div>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d3">
+      <div class="q-label"><span class="q-num">7</span> En tus propias palabras: ¿qué está pasando en tu vida ahora mismo?</div>
+      <p class="q-sub">Escribe libremente. Esto es solo para mí.</p>
+      <textarea id="f-situacion" class="q-textarea" rows="4" placeholder="Puedes contarme lo que quieras… situación laboral, relacional, emocional…" oninput="autoSave()"></textarea>
+    </div>
+  </div>
+  <div class="btn-nav-row">
+    <button class="btn-back" onclick="goScreen('s-1')">← Volver</button>
+    <button class="btn-next" onclick="nextFrom2()">Continuar →</button>
   </div>
 </div>
 
-<!-- ════════ SECCIÓN 3: FORTALEZAS Y SENSIBILIDADES ════════ -->
-<div id="s-sec3" class="screen">
-  <div class="nav">
-    <div class="nav-brand">Nathalia Velasco<span>Mentoría Individual</span></div>
-    <div class="nav-step">Paso 3 de 4</div>
+<!-- ═══════════════════════════════════
+     SCREEN 3: VISIÓN DE TRANSFORMACIÓN
+═══════════════════════════════════ -->
+<div id="s-3" class="screen form-screen">
+  <div class="topnav">
+    <div class="topnav-brand">Simoné<em>Arte y Naturaleza</em></div>
+    <div class="topnav-step">Paso 3 de 4</div>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+  <div class="section-hero" style="background:linear-gradient(135deg,#3a5010,#6a8a28);">
+    <div class="section-num">3</div>
+    <h2>Tu visión de cambio</h2>
+    <p>Lo que quieres transformar y hacia dónde vas</p>
+  </div>
   <div class="form-body">
-    <div class="section-header">
-      <div class="section-num"><div class="s-circle">3</div> Fortalezas y Sensibilidades</div>
-      <h2>Tus herramientas</h2>
-      <p>Conocer tus recursos y preferencias nos ayuda a diseñar un camino a tu medida.</p>
+    <div class="q-block fade-in">
+      <div class="q-label"><span class="q-num">8</span> ¿Qué resultado esperas de la mentoría?</div>
+      <p class="q-sub">Puedes seleccionar más de uno</p>
+      <div class="card-grid" id="grid-resultado">
+        <div class="opt-card multi" onclick="toggleMulti(this,'f-resultado')"><div class="opt-check">✓</div><div class="opt-card-icon">🌱</div><div class="opt-card-text">Sanar emocionalmente</div><div class="opt-card-sub">Liberar cargas del pasado</div></div>
+        <div class="opt-card multi" onclick="toggleMulti(this,'f-resultado')"><div class="opt-check">✓</div><div class="opt-card-icon">🔦</div><div class="opt-card-text">Encontrar dirección</div><div class="opt-card-sub">Claridad sobre mi camino</div></div>
+        <div class="opt-card multi" onclick="toggleMulti(this,'f-resultado')"><div class="opt-check">✓</div><div class="opt-card-icon">🗣️</div><div class="opt-card-text">Comunicarme mejor</div><div class="opt-card-sub">Expresar, poner límites</div></div>
+        <div class="opt-card multi" onclick="toggleMulti(this,'f-resultado')"><div class="opt-check">✓</div><div class="opt-card-icon">⚡</div><div class="opt-card-text">Recuperar energía</div><div class="opt-card-sub">Superar el agotamiento</div></div>
+        <div class="opt-card multi" onclick="toggleMulti(this,'f-resultado')"><div class="opt-check">✓</div><div class="opt-card-icon">🎨</div><div class="opt-card-text">Desbloquear creatividad</div><div class="opt-card-sub">Fluir, crear sin miedo</div></div>
+        <div class="opt-card multi" onclick="toggleMulti(this,'f-resultado')"><div class="opt-check">✓</div><div class="opt-card-icon">💞</div><div class="opt-card-text">Mejorar relaciones</div><div class="opt-card-sub">Familia, pareja, trabajo</div></div>
+      </div>
+      <input type="hidden" id="f-resultado"/>
     </div>
-    <div class="form-card">
-      <div class="form-group">
-        <label class="form-label">💪 ¿Con qué fortalezas sientes que cuentas hoy? <span class="hint">— Soy resiliente, tengo facilidad para aprender, soy observador(a), soy creativo(a)...</span></label>
-        <textarea id="f-fortalezas" class="form-textarea tall" placeholder="Escribe las fortalezas y herramientas que reconoces en ti..."></textarea>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d1">
+      <div class="q-label"><span class="q-num">9</span> ¿Con qué tipo de proceso resonas más?</div>
+      <div class="card-grid cols-1">
+        <div class="opt-card" onclick="selectSingle(this,'f-proceso','Arte y expresión creativa')"><div class="opt-check">✓</div><div style="display:flex;align-items:center;gap:12px;"><div style="font-size:26px;">🎨</div><div style="text-align:left;"><div class="opt-card-text" style="font-size:13px;">Arte y expresión creativa</div><div class="opt-card-sub" style="text-align:left;">Arteterapia, color, formas, símbolos</div></div></div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-proceso','Energía y cuerpo')"><div class="opt-check">✓</div><div style="display:flex;align-items:center;gap:12px;"><div style="font-size:26px;">✋</div><div style="text-align:left;"><div class="opt-card-text" style="font-size:13px;">Energía y cuerpo</div><div class="opt-card-sub" style="text-align:left;">Reiki, bienestar energético, sensaciones</div></div></div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-proceso','Geometría y patrones')"><div class="opt-check">✓</div><div style="display:flex;align-items:center;gap:12px;"><div style="font-size:26px;">⬡</div><div style="text-align:left;"><div class="opt-card-text" style="font-size:13px;">Geometría sagrada y patrones</div><div class="opt-card-sub" style="text-align:left;">Símbolos universales, orden y conexión</div></div></div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-proceso','Conversación y reflexión')"><div class="opt-check">✓</div><div style="display:flex;align-items:center;gap:12px;"><div style="font-size:26px;">💬</div><div style="text-align:left;"><div class="opt-card-text" style="font-size:13px;">Conversación y reflexión</div><div class="opt-card-sub" style="text-align:left;">Acompañamiento, escucha activa, insight</div></div></div></div>
+      </div>
+      <input type="hidden" id="f-proceso"/>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d2">
+      <div class="q-label"><span class="q-num">10</span> ¿Qué tan dispuesto/a estás a trabajar en ti mismo/a?</div>
+      <div class="intensity-wrap">
+        <div class="intensity-labels"><span>Aún con dudas</span><span>Completamente</span></div>
+        <input type="range" id="slider-disposicion" min="1" max="10" value="7" oninput="updateSlider('disposicion')" onchange="autoSave()"/>
+        <div class="intensity-val" id="val-disposicion">7</div>
+        <div class="intensity-desc" id="desc-disposicion">Muy dispuesto/a</div>
       </div>
     </div>
-    <div class="form-card">
-      <div class="form-group" style="margin-bottom:12px">
-        <label class="form-label">🚫 Barreras Sensoriales <span class="hint">— Esto nos permite adaptar las actividades artísticas y el ambiente de las sesiones</span></label>
-        <p style="font-size:13px;color:var(--ts);margin-bottom:4px;">¿Qué elementos NO te gustan o te desagradan?</p>
-      </div>
-      <div class="sensorial-grid">
-        <div class="sensorial-item">
-          <label><span class="icon">👃</span> Olores</label>
-          <input id="f-olores" class="form-input" type="text" placeholder="Ej: incienso fuerte, perfumes..."/>
-        </div>
-        <div class="sensorial-item">
-          <label><span class="icon">✋</span> Texturas</label>
-          <input id="f-texturas" class="form-input" type="text" placeholder="Ej: pegajosas, húmedas..."/>
-        </div>
-        <div class="sensorial-item">
-          <label><span class="icon">🎨</span> Colores</label>
-          <input id="f-colores" class="form-input" type="text" placeholder="Ej: tonos muy brillantes..."/>
-        </div>
-        <div class="sensorial-item">
-          <label><span class="icon">🔊</span> Sonidos</label>
-          <input id="f-sonidos" class="form-input" type="text" placeholder="Ej: ruidos fuertes, silencio total..."/>
-        </div>
-      </div>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d3">
+      <div class="q-label"><span class="q-num">11</span> ¿Qué te gustaría que Nathalia supiera antes de su primera sesión?</div>
+      <textarea id="f-mensaje" class="q-textarea" rows="4" placeholder="Algo importante sobre ti, tu historia, o lo que más te preocupa…" oninput="autoSave()"></textarea>
     </div>
-    <div class="form-actions">
-      <button class="btn-back" onclick="irA('s-sec2')">← Volver</button>
-      <button class="btn-next" onclick="irA('s-sec4')">Continuar →</button>
-    </div>
+  </div>
+  <div class="btn-nav-row">
+    <button class="btn-back" onclick="goScreen('s-2')">← Volver</button>
+    <button class="btn-next" onclick="nextFrom3()">Continuar →</button>
   </div>
 </div>
 
-<!-- ════════ SECCIÓN 4: PREFERENCIAS DE SESIÓN ════════ -->
-<div id="s-sec4" class="screen">
-  <div class="nav">
-    <div class="nav-brand">Nathalia Velasco<span>Mentoría Individual</span></div>
-    <div class="nav-step">Paso 4 de 4</div>
+<!-- ═══════════════════════════════════
+     SCREEN 4: CONEXIÓN Y CONTEXTO
+═══════════════════════════════════ -->
+<div id="s-4" class="screen form-screen">
+  <div class="topnav">
+    <div class="topnav-brand">Simoné<em>Arte y Naturaleza</em></div>
+    <div class="topnav-step">Paso 4 de 4</div>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div>
+  <div class="section-hero" style="background:linear-gradient(135deg,#2e4010,#507020);">
+    <div class="section-num">4</div>
+    <h2>Contexto y conexión</h2>
+    <p>Detalles finales para tu diagnóstico personalizado</p>
+  </div>
   <div class="form-body">
-    <div class="section-header">
-      <div class="section-num"><div class="s-circle">4</div> Preferencias de Sesiones</div>
-      <h2>Tu proceso, a tu ritmo</h2>
-      <p>Cuéntanos cómo prefieres trabajar para diseñar tu experiencia ideal.</p>
-    </div>
-    <div class="form-card">
-      <div class="form-group">
-        <label class="form-label">⚡ ¿Deseas incluir la terapia de Reiki en tus sesiones de mentoría?</label>
-        <div class="radio-group" id="rg-reiki">
-          <label class="radio-option" onclick="selectRadio(this,'reiki','si')">
-            <input type="radio" name="reiki" value="si"/> <span>✅ Sí, me interesa</span>
-          </label>
-          <label class="radio-option" onclick="selectRadio(this,'reiki','no')">
-            <input type="radio" name="reiki" value="no"/> <span>❌ No, prefiero no incluirlo</span>
-          </label>
-          <label class="radio-option" onclick="selectRadio(this,'reiki','saber_mas')">
-            <input type="radio" name="reiki" value="saber_mas"/> <span>💡 Me gustaría saber más antes de decidir</span>
-          </label>
-          <label class="radio-option" onclick="selectRadio(this,'reiki','no_seguro')">
-            <input type="radio" name="reiki" value="no_seguro"/> <span>🤔 No estoy seguro(a)</span>
-          </label>
-        </div>
+    <div class="q-block fade-in">
+      <div class="q-label"><span class="q-num">12</span> ¿Has tenido algún proceso terapéutico o de acompañamiento antes?</div>
+      <div class="card-grid">
+        <div class="opt-card" onclick="selectSingle(this,'f-prev','Sí, recientemente')"><div class="opt-check">✓</div><div class="opt-card-icon">🔄</div><div class="opt-card-text">Sí, recientemente</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-prev','Sí, hace tiempo')"><div class="opt-check">✓</div><div class="opt-card-icon">📅</div><div class="opt-card-text">Sí, hace tiempo</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-prev','No, es mi primera vez')"><div class="opt-check">✓</div><div class="opt-card-icon">🌱</div><div class="opt-card-text">Primera vez</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-prev','Prefiero no decirlo')"><div class="opt-check">✓</div><div class="opt-card-icon">🤐</div><div class="opt-card-text">No lo comparto</div></div>
       </div>
+      <input type="hidden" id="f-prev"/>
     </div>
-    <div class="form-card">
-      <div class="form-group">
-        <label class="form-label">📅 Disponibilidad Horaria <span class="hint">— Cada sesión dura 90 minutos</span></label>
-        <textarea id="f-disponibilidad" class="form-textarea tall" placeholder="Ej: 'Lunes y miércoles por la tarde', 'Martes por la mañana', 'Flexibilidad los fines de semana'..."></textarea>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d1">
+      <div class="q-label"><span class="q-num">13</span> ¿Qué modalidad prefieres para la mentoría?</div>
+      <div class="card-grid">
+        <div class="opt-card" onclick="selectSingle(this,'f-modal','Presencial')"><div class="opt-check">✓</div><div class="opt-card-icon">🏡</div><div class="opt-card-text">Presencial</div><div class="opt-card-sub">En Medellín</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-modal','Virtual')"><div class="opt-check">✓</div><div class="opt-card-icon">💻</div><div class="opt-card-text">Virtual</div><div class="opt-card-sub">Desde donde estés</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-modal','Cualquiera')"><div class="opt-check">✓</div><div class="opt-card-icon">🌐</div><div class="opt-card-text">Me adapto</div><div class="opt-card-sub">Lo que funcione mejor</div></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">💭 ¿Algo más que quieras compartir con Nathalia? <span class="hint">— opcional</span></label>
-        <textarea id="f-extra" class="form-textarea" placeholder="Cualquier información adicional que consideres importante..."></textarea>
+      <input type="hidden" id="f-modal"/>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d2">
+      <div class="q-label"><span class="q-num">14</span> ¿Cómo describes tu relación con tu intuición?</div>
+      <div class="card-grid cols-1">
+        <div class="opt-card" onclick="selectSingle(this,'f-intuicion','La escucho siempre')"><div class="opt-check">✓</div><div class="opt-card-icon">🌟</div><div class="opt-card-text" style="text-align:left;padding-left:8px;display:inline-block;">La escucho siempre — confío en mi guía interior</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-intuicion','A veces la escucho')"><div class="opt-check">✓</div><div class="opt-card-icon">🌙</div><div class="opt-card-text" style="text-align:left;padding-left:8px;display:inline-block;">A veces — me cuesta distinguirla del miedo</div></div>
+        <div class="opt-card" onclick="selectSingle(this,'f-intuicion','Poca conexión')"><div class="opt-check">✓</div><div class="opt-card-icon">🌫️</div><div class="opt-card-text" style="text-align:left;padding-left:8px;display:inline-block;">Poca conexión — prefiero la lógica y los datos</div></div>
       </div>
+      <input type="hidden" id="f-intuicion"/>
     </div>
-    <div class="form-actions">
-      <button class="btn-back" onclick="irA('s-sec3')">← Volver</button>
-      <button class="btn-next btn-finish" onclick="finalizarDiagnostico()">Enviar mi diagnóstico 🌿</button>
+    <div class="q-divider"></div>
+    <div class="q-block fade-in fade-in-d3">
+      <div class="q-label"><span class="q-num">15</span> ¿Hay algo más que quieras que sepa?</div>
+      <textarea id="f-extra" class="q-textarea" rows="3" placeholder="Opcional — cualquier cosa que consideres importante…" oninput="autoSave()"></textarea>
     </div>
+  </div>
+  <div class="btn-nav-row" style="grid-template-columns:1fr 2fr;">
+    <button class="btn-back" onclick="goScreen('s-3')">← Volver</button>
+    <button class="btn-next" style="background:linear-gradient(135deg,var(--na),var(--rj));" onclick="submitDiag()">Ver mi diagnóstico ✦</button>
   </div>
 </div>
 
-<!-- ════════ RESULTADO ════════ -->
-<div id="s-resultado" class="screen">
-  <div id="readonly-banner" class="readonly-banner" style="display:none">
-    👁 Estás viendo el diagnóstico compartido por <strong id="nombre-readonly"></strong>
-  </div>
-  <div class="result-hero">
-    <div class="result-check">🌿</div>
-    <h1>¡Gracias por compartir tu esencia!</h1>
-    <p>Esta información es confidencial y fundamental para co-crear tu camino de transformación. Nathalia se pondrá en contacto contigo pronto.</p>
-  </div>
-  <div class="result-body">
-
-    <!-- Sección 1 -->
-    <div class="result-section">
-      <div class="result-section-header"><div class="rs-num">1</div><h3>Datos Personales</h3></div>
-      <div class="result-section-body">
-        <div class="result-field"><div class="result-field-label">Nombre Completo</div><div class="result-field-value" id="r-nombre">—</div></div>
-        <div class="result-field"><div class="result-field-label">Fecha de Nacimiento</div><div class="result-field-value" id="r-fecha">—</div></div>
-        <div class="result-field"><div class="result-field-label">Email</div><div class="result-field-value" id="r-email">—</div></div>
-        <div class="result-field"><div class="result-field-label">WhatsApp</div><div class="result-field-value" id="r-whatsapp">—</div></div>
-      </div>
-    </div>
-
-    <!-- Sección 2 -->
-    <div class="result-section">
-      <div class="result-section-header"><div class="rs-num">2</div><h3>Visión de Transformación</h3></div>
-      <div class="result-section-body">
-        <div class="result-field"><div class="result-field-label">🌊 A nivel Emocional</div><div class="result-field-value" id="r-emocional">—</div></div>
-        <div class="result-field"><div class="result-field-label">💬 A nivel Comunicacional</div><div class="result-field-value" id="r-comunicacional">—</div></div>
-        <div class="result-field"><div class="result-field-label">✨ A nivel Espiritual</div><div class="result-field-value" id="r-espiritual">—</div></div>
-        <div class="result-field"><div class="result-field-label">🧠 A nivel Cognitivo / Mental</div><div class="result-field-value" id="r-cognitivo">—</div></div>
-        <div class="result-field"><div class="result-field-label">🌱 Motivación Principal</div><div class="result-field-value" id="r-motivacion">—</div></div>
-      </div>
-    </div>
-
-    <!-- Sección 3 -->
-    <div class="result-section">
-      <div class="result-section-header"><div class="rs-num">3</div><h3>Fortalezas y Sensibilidades</h3></div>
-      <div class="result-section-body">
-        <div class="result-field"><div class="result-field-label">💪 Fortalezas</div><div class="result-field-value" id="r-fortalezas">—</div></div>
-        <div class="result-field">
-          <div class="result-field-label">🚫 Barreras Sensoriales</div>
-          <div class="result-field-value" id="r-sensorial">—</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sección 4 -->
-    <div class="result-section">
-      <div class="result-section-header"><div class="rs-num">4</div><h3>Preferencias de Sesiones</h3></div>
-      <div class="result-section-body">
-        <div class="result-field"><div class="result-field-label">⚡ Reiki en sesiones</div><div class="result-field-value" id="r-reiki">—</div></div>
-        <div class="result-field"><div class="result-field-label">📅 Disponibilidad Horaria</div><div class="result-field-value" id="r-disponibilidad">—</div></div>
-        <div class="result-field"><div class="result-field-label">💭 Comentarios adicionales</div><div class="result-field-value" id="r-extra">—</div></div>
-      </div>
-    </div>
-
-    <!-- Acciones -->
-    <div id="acciones-resultado" class="result-actions">
-      <button class="btn-share" onclick="compartirDiagnostico()">🔗 Compartir enlace del diagnóstico</button>
-      <button class="btn-wa" onclick="enviarWhatsApp()">💚 Enviar a Nathalia por WhatsApp</button>
-      <button class="btn-nuevo" onclick="nuevoDiagnostico()">↩ Nuevo diagnóstico</button>
-    </div>
+<!-- ═══════════════════════════════════
+     LOADING
+═══════════════════════════════════ -->
+<div id="s-loading" class="screen">
+  <div class="loader-ring"></div>
+  <h2>Analizando tu diagnóstico…</h2>
+  <p>Estoy procesando tus respuestas para darte una visión personalizada de tu momento actual.</p>
+  <div class="loading-steps">
+    <div class="loading-step" id="ls-1"><div class="step-dot">✓</div> Explorando tu estado emocional</div>
+    <div class="loading-step" id="ls-2"><div class="step-dot">✓</div> Identificando tu dimensión primaria</div>
+    <div class="loading-step" id="ls-3"><div class="step-dot">✓</div> Diseñando tu ruta de transformación</div>
+    <div class="loading-step" id="ls-4"><div class="step-dot">✓</div> Preparando mensaje personalizado</div>
   </div>
 </div>
 
-<!-- Toast -->
-<div id="toast" class="toast">¡Enlace copiado al portapapeles! 🔗</div>
+<!-- ═══════════════════════════════════
+     RESULTS
+═══════════════════════════════════ -->
+<div id="s-results" class="screen">
+  <div id="readonly-banner" class="readonly-banner" style="display:none;">
+    Modo visualización — Diagnóstico de <span id="banner-name"></span>
+  </div>
+  <div class="results-hero">
+    <div class="results-hero-badge">Tu Diagnóstico Inicial</div>
+    <h2>Hola,</h2>
+    <div class="hero-name" id="r-name">…</div>
+    <p id="r-fecha">Diagnóstico realizado hoy</p>
+  </div>
+  <div class="results-body" id="results-body">
+    <!-- Populated by JS -->
+  </div>
+</div>
 
 <script>
-// ─── DATOS GLOBALES ───
-let datos = {};
-let reikiVal = '';
-let modoLectura = false;
+// ═══════════════════════════════════════
+//   DATA & STATE
+// ═══════════════════════════════════════
+const STORAGE_KEY = 'simone_diag_draft';
+let formData = {};
+let isReadOnly = false;
 
-// ─── NAVEGACIÓN ───
-function irA(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-function siguienteSec(actual, siguiente) {
-  // Validación básica sec 1
-  if (actual === 's-sec1') {
-    const nombre = document.getElementById('f-nombre').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const wa = document.getElementById('f-whatsapp').value.trim();
-    if (!nombre || !email || !wa) {
-      alert('Por favor completa Nombre, Email y WhatsApp para continuar.');
-      return;
-    }
-  }
-  irA(siguiente);
-}
-
-// ─── RADIO BUTTONS ───
-function selectRadio(label, grupo, val) {
-  document.querySelectorAll(`#rg-${grupo} .radio-option`).forEach(r => r.classList.remove('selected'));
-  label.classList.add('selected');
-  label.querySelector('input').checked = true;
-  if (grupo === 'reiki') reikiVal = val;
-}
-
-// ─── FINALIZAR ───
-function finalizarDiagnostico() {
-  const reikiLabels = {
-    'si': 'Sí, me interesa incluir Reiki',
-    'no': 'No, prefiero no incluirlo',
-    'saber_mas': 'Me gustaría saber más antes de decidir',
-    'no_seguro': 'No estoy seguro(a)',
-    '': 'No especificado'
-  };
-
-  // Sensorial
-  const sensorial = [];
-  const ol = document.getElementById('f-olores').value.trim();
-  const te = document.getElementById('f-texturas').value.trim();
-  const co = document.getElementById('f-colores').value.trim();
-  const so = document.getElementById('f-sonidos').value.trim();
-  if (ol) sensorial.push(`👃 Olores: ${ol}`);
-  if (te) sensorial.push(`✋ Texturas: ${te}`);
-  if (co) sensorial.push(`🎨 Colores: ${co}`);
-  if (so) sensorial.push(`🔊 Sonidos: ${so}`);
-
-  datos = {
-    nombre: document.getElementById('f-nombre').value.trim(),
-    fecha: document.getElementById('f-fecha').value,
-    email: document.getElementById('f-email').value.trim(),
-    whatsapp: document.getElementById('f-whatsapp').value.trim(),
-    emocional: document.getElementById('f-emocional').value.trim(),
-    comunicacional: document.getElementById('f-comunicacional').value.trim(),
-    espiritual: document.getElementById('f-espiritual').value.trim(),
-    cognitivo: document.getElementById('f-cognitivo').value.trim(),
-    motivacion: document.getElementById('f-motivacion').value.trim(),
-    fortalezas: document.getElementById('f-fortalezas').value.trim(),
-    sensorial: sensorial.length ? sensorial.join('\n') : '',
-    reiki: reikiLabels[reikiVal],
-    disponibilidad: document.getElementById('f-disponibilidad').value.trim(),
-    extra: document.getElementById('f-extra').value.trim(),
-    fecha_diligenciado: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'})
-  };
-
-  // Guardar en localStorage
-  localStorage.setItem('natha_diagnostico', JSON.stringify(datos));
-
-  mostrarResultado(datos);
-  irA('s-resultado');
-}
-
-// ─── MOSTRAR RESULTADO ───
-function mostrarResultado(d) {
-  const set = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.textContent = val || '';
-      el.className = 'result-field-value' + (!val ? ' empty' : '');
-      if (!val) el.textContent = 'No especificado';
-    }
-  };
-
-  set('r-nombre', d.nombre);
-  set('r-fecha', d.fecha ? new Date(d.fecha + 'T12:00:00').toLocaleDateString('es-CO', {year:'numeric',month:'long',day:'numeric'}) : '');
-  set('r-email', d.email);
-  set('r-whatsapp', d.whatsapp);
-  set('r-emocional', d.emocional);
-  set('r-comunicacional', d.comunicacional);
-  set('r-espiritual', d.espiritual);
-  set('r-cognitivo', d.cognitivo);
-  set('r-motivacion', d.motivacion);
-  set('r-fortalezas', d.fortalezas);
-  set('r-sensorial', d.sensorial);
-  set('r-reiki', d.reiki);
-  set('r-disponibilidad', d.disponibilidad);
-  set('r-extra', d.extra);
-}
-
-// ─── COMPARTIR ───
-function compartirDiagnostico() {
-  try {
-    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(datos))));
-    const url = window.location.href.split('#')[0] + '#ver=' + encoded;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).then(() => mostrarToast('¡Enlace copiado al portapapeles! 🔗'));
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = url;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      mostrarToast('¡Enlace copiado al portapapeles! 🔗');
-    }
-  } catch(e) {
-    mostrarToast('Error al generar enlace. Intenta de nuevo.');
-  }
-}
-
-// ─── WHATSAPP ───
-function enviarWhatsApp() {
-  const msg = `Hola Nathalia 🌿 Acabo de completar mi Diagnóstico Inicial de Mentoría Individual.
-
-*Nombre:* ${datos.nombre}
-*Email:* ${datos.email}
-*WhatsApp:* ${datos.whatsapp}
-
-*Deseo transformar:*
-• Emocional: ${datos.emocional || '—'}
-• Comunicacional: ${datos.comunicacional || '—'}
-• Espiritual: ${datos.espiritual || '—'}
-• Cognitivo: ${datos.cognitivo || '—'}
-
-*Motivación:* ${datos.motivacion || '—'}
-
-*Reiki:* ${datos.reiki}
-*Disponibilidad:* ${datos.disponibilidad || '—'}
-
-¡Quedé muy emocionado(a) de comenzar este proceso! 🌱`;
-
-  const tel = '573208857608';
-  const url = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
-}
-
-// ─── NUEVO DIAGNÓSTICO ───
-function nuevoDiagnostico() {
-  if (confirm('¿Deseas comenzar un nuevo diagnóstico? Los datos actuales se borrarán.')) {
-    localStorage.removeItem('natha_diagnostico');
-    location.href = location.href.split('#')[0];
-  }
-}
-
-// ─── TOAST ───
-function mostrarToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ─── AL CARGAR: verificar si hay datos compartidos o guardados ───
+// ═══════════════════════════════════════
+//   INIT
+// ═══════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
-  const hash = window.location.hash;
+  updateSlider('urgencia');
+  updateSlider('disposicion');
 
-  // Modo visualización (enlace compartido)
+  // Check for shared link
+  const hash = window.location.hash;
   if (hash.startsWith('#ver=')) {
     try {
-      const encoded = hash.slice(5);
+      const encoded = hash.replace('#ver=','');
       const decoded = JSON.parse(decodeURIComponent(escape(atob(encoded))));
-      datos = decoded;
-      modoLectura = true;
-      mostrarResultado(datos);
-      irA('s-resultado');
-      document.getElementById('readonly-banner').style.display = 'block';
-      document.getElementById('nombre-readonly').textContent = datos.nombre || 'un usuario';
-      // Ocultar botón nuevo diagnóstico en modo lectura
-      const btnNuevo = document.querySelector('.btn-nuevo');
-      if (btnNuevo) btnNuevo.style.display = 'none';
-    } catch(e) {
-      console.error('Error al decodificar:', e);
-    }
+      isReadOnly = true;
+      formData = decoded;
+      guardarEnPanel(decoded, encoded);
+      showResults(decoded, true);
+    } catch(e) { console.error(e); }
     return;
   }
 
-  // Verificar localStorage
-  const guardado = localStorage.getItem('natha_diagnostico');
-  if (guardado) {
-    try {
-      const d = JSON.parse(guardado);
-      // Si hay datos guardados, pre-rellenar y mostrar resultado
-      datos = d;
-      mostrarResultado(d);
-      // Preguntar si quiere ver resultados anteriores
-      if (confirm(`¡Hola ${d.nombre || 'de nuevo'}! 🌿\n\nTienes un diagnóstico guardado.\n¿Deseas verlo o prefieres comenzar uno nuevo?`)) {
-        irA('s-resultado');
-      }
-    } catch(e) {
-      localStorage.removeItem('natha_diagnostico');
-    }
+  // Load draft
+  const draft = localStorage.getItem(STORAGE_KEY);
+  if (draft) {
+    try { formData = JSON.parse(draft); } catch(e) {}
   }
 });
+
+// ═══════════════════════════════════════
+//   NAVIGATION
+// ═══════════════════════════════════════
+function goScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+
+  const hasProgress = ['s-1','s-2','s-3','s-4'].includes(id);
+  document.getElementById('progress-bar-wrap').style.display = hasProgress ? 'block' : 'none';
+
+  const pct = {s1:15,s2:40,s3:65,s4:90}[id.replace('-','')] || 0;
+  document.getElementById('progress-bar-fill').style.width = pct + '%';
+
+  // Animate cards
+  setTimeout(() => {
+    document.querySelectorAll('#'+id+' .fade-in').forEach((el,i) => {
+      el.style.animationDelay = (i*0.07)+'s';
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = '';
+    });
+  }, 50);
+}
+
+function startDiag() {
+  goScreen('s-1');
+}
+
+// ═══════════════════════════════════════
+//   FORM CONTROLS
+// ═══════════════════════════════════════
+function selectSingle(el, fieldId, value) {
+  const group = el.parentElement;
+  group.querySelectorAll('.opt-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const hidden = document.getElementById(fieldId);
+  if (hidden) hidden.value = value;
+  autoSave();
+}
+
+function toggleMulti(el, fieldId) {
+  el.classList.toggle('selected');
+  const hidden = document.getElementById(fieldId);
+  if (!hidden) return;
+  const selected = [];
+  el.parentElement.querySelectorAll('.opt-card.selected').forEach(c => {
+    selected.push(c.querySelector('.opt-card-text').textContent.trim());
+  });
+  hidden.value = selected.join('|');
+  autoSave();
+}
+
+function toggleChip(el, fieldId) {
+  el.classList.toggle('selected');
+  const container = el.parentElement;
+  const hidden = document.getElementById(fieldId);
+  if (!hidden) return;
+  const selected = [];
+  container.querySelectorAll('.e-chip.selected').forEach(c => selected.push(c.textContent.trim()));
+  hidden.value = selected.join('|');
+  autoSave();
+}
+
+const urgDescs = ['','Muy bajo','Bajo','Algo presente','Moderado','Moderado','Significativo','Bastante urgente','Muy urgente','Crítico','Máxima urgencia'];
+const dispDescs = ['','Muy inseguro','Con dudas','Algo dispuesto','Dispuesto','Bastante dispuesto','Dispuesto','Muy dispuesto','Muy dispuesto','Casi seguro','Completamente'];
+
+function updateSlider(name) {
+  const val = parseInt(document.getElementById('slider-'+name).value);
+  document.getElementById('val-'+name).textContent = val;
+  const descs = name === 'urgencia' ? urgDescs : dispDescs;
+  document.getElementById('desc-'+name).textContent = descs[val] || '';
+  autoSave();
+}
+
+function autoSave() {
+  collectFormData();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+}
+
+function collectFormData() {
+  const fields = ['f-nombre','f-edad','f-canal','f-estado-em','f-area','f-situacion','f-resultado','f-proceso','f-mensaje','f-prev','f-modal','f-intuicion','f-extra'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) formData[id.replace('f-','')] = el.value;
+  });
+  formData['urgencia'] = document.getElementById('slider-urgencia')?.value || '5';
+  formData['disposicion'] = document.getElementById('slider-disposicion')?.value || '7';
+}
+
+// ═══════════════════════════════════════
+//   VALIDATION & NAVIGATION
+// ═══════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function nextFrom1() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  if (!nombre) { showToast('Por favor escribe tu nombre'); return; }
+  collectFormData();
+  goScreen('s-2');
+}
+function nextFrom2() {
+  collectFormData();
+  goScreen('s-3');
+}
+function nextFrom3() {
+  collectFormData();
+  goScreen('s-4');
+}
+
+// ═══════════════════════════════════════
+//   SUBMIT & LOADING ANIMATION
+// ═══════════════════════════════════════
+function submitDiag() {
+  collectFormData();
+  formData.fecha = new Date().toLocaleDateString('es-CO', {year:'numeric',month:'long',day:'numeric'});
+  formData.hora = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+
+  goScreen('s-loading');
+  document.getElementById('progress-bar-fill').style.width = '100%';
+
+  const steps = ['ls-1','ls-2','ls-3','ls-4'];
+  steps.forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.add('done'), 600 + i*800);
+  });
+
+  setTimeout(() => {
+    showResults(formData, false);
+  }, 4200);
+}
+
+// ═══════════════════════════════════════
+//   DIAGNOSTIC ENGINE
+// ═══════════════════════════════════════
+function computeScores(d) {
+  // Scores 0-100 per dimension
+  let em = 50, co = 50, es = 50, cog = 50;
+
+  const estados = (d['estado-em'] || '').toLowerCase();
+  const resultados = (d['resultado'] || '').toLowerCase();
+  const area = (d['area'] || '').toLowerCase();
+  const proceso = (d['proceso'] || '').toLowerCase();
+  const situacion = (d['situacion'] || '');
+  const mensaje = (d['mensaje'] || '');
+  const intuicion = (d['intuicion'] || '').toLowerCase();
+  const urgencia = parseInt(d['urgencia'] || 5);
+  const disposicion = parseInt(d['disposicion'] || 7);
+
+  // EMOCIONAL dimension
+  if (estados.includes('ansios') || estados.includes('estres')) em += 20;
+  if (estados.includes('agotad') || estados.includes('quemad')) em += 22;
+  if (estados.includes('triste') || estados.includes('desconect')) em += 18;
+  if (estados.includes('motivad') || estados.includes('energía')) em -= 15;
+  if (estados.includes('estable')) em -= 10;
+  if (area.includes('emocional')) em += 15;
+  if (resultados.includes('sanar')) em += 12;
+  if (resultados.includes('energía') || resultados.includes('energia')) em += 10;
+  if (urgencia >= 8) em += 10;
+  if (situacion.length > 100) em += 8;
+
+  // COMUNICACIONAL dimension
+  if (estados.includes('sobrec') || estados.includes('muchas ideas')) co += 15;
+  if (area.includes('relaciones')) co += 20;
+  if (resultados.includes('comunicar')) co += 20;
+  if (resultados.includes('relaciones')) co += 15;
+  if (resultados.includes('límites') || resultados.includes('limites')) co += 12;
+  if (proceso.includes('conversaci')) co += 10;
+  if (mensaje.length > 80) co += 8;
+
+  // ESPIRITUAL dimension
+  if (area.includes('propósito') || area.includes('proposito')) es += 20;
+  if (estados.includes('bloqueado') || estados.includes('dirección') || estados.includes('direccion')) es += 18;
+  if (estados.includes('confundido') || estados.includes('transici')) es += 15;
+  if (resultados.includes('dirección') || resultados.includes('direccion')) es += 15;
+  if (proceso.includes('energía') || proceso.includes('reiki')) es += 18;
+  if (proceso.includes('geometría') || proceso.includes('geometria')) es += 20;
+  if (intuicion.includes('siempre')) es -= 10;
+  if (intuicion.includes('poca')) es += 15;
+  if (intuicion.includes('veces')) es += 8;
+
+  // COGNITIVO dimension
+  if (estados.includes('bloqueado')) cog += 18;
+  if (estados.includes('sobrec') || estados.includes('muchas ideas')) cog += 15;
+  if (estados.includes('confundido')) cog += 12;
+  if (area.includes('creatividad')) cog += 22;
+  if (resultados.includes('creatividad') || resultados.includes('desbloquear')) cog += 20;
+  if (resultados.includes('dirección') || resultados.includes('claridad')) cog += 12;
+  if (proceso.includes('arte')) cog += 15;
+  if (proceso.includes('geometría') || proceso.includes('geometria')) cog += 10;
+
+  // Disposition bonus
+  if (disposicion >= 8) { em += 5; co += 5; es += 5; cog += 5; }
+
+  // Normalize 0-100
+  const clamp = v => Math.max(20, Math.min(98, Math.round(v)));
+  return {
+    emocional: clamp(em),
+    comunicacional: clamp(co),
+    espiritual: clamp(es),
+    cognitivo: clamp(cog)
+  };
+}
+
+function getPrimaryDimension(scores) {
+  const entries = Object.entries(scores);
+  return entries.reduce((a,b) => b[1] > a[1] ? b : a)[0];
+}
+
+const DIMENSION_INFO = {
+  emocional: {
+    icon: '💚',
+    name: 'Emocional',
+    subtitle: 'Bienestar y equilibrio interior',
+    insight: 'Tu dimensión emocional está pidiendo atención. Las emociones acumuladas o el agotamiento pueden ser señales de que es momento de hacer una pausa y recargar desde adentro.',
+    msg: 'Lo que más me impresiona de quienes llegan con esta carga emocional es su valentía. El solo hecho de pedir ayuda ya es un acto transformador. Juntas, vamos a crear espacio para soltar lo que ya no necesitas cargar.',
+    steps: [
+      { head: 'Primer paso: nombrar lo que sientes', body: 'En nuestra primera sesión exploraremos qué emociones predominan y de dónde vienen, sin juicio.' },
+      { head: 'Herramienta sugerida: Arteterapia', body: 'El arte permite externalizar lo que las palabras no alcanzan. Colores y formas como lenguaje del alma.' },
+      { head: 'Compromiso de 21 días', body: 'Un ritual mínimo diario de 5 minutos para empezar a regular tu sistema nervioso entre sesiones.' }
+    ],
+    service: 'mentoria-individual',
+    toolPrimary: 'Arteterapia', toolSecondary: 'Reiki'
+  },
+  comunicacional: {
+    icon: '🗣️',
+    name: 'Comunicacional',
+    subtitle: 'Expresión auténtica y vínculos',
+    insight: 'La forma en que te expresas y te relacionas con los demás está en el centro de tu proceso. Aprender a decir lo que sientes y poner límites sanos puede cambiar toda tu calidad de vida.',
+    msg: 'Cuando el cuerpo guarda lo que la boca no dice, las relaciones se tensan y la energía se bloquea. En nuestro proceso vamos a trabajar desde el arte y la conciencia corporal para que encuentres tu voz auténtica.',
+    steps: [
+      { head: 'Mapear tus patrones relacionales', body: 'Identificar en qué situaciones te cuesta más expresarte o poner límites.' },
+      { head: 'Práctica con Arteterapia', body: 'Crear desde el arte una representación de cómo quieres que sean tus relaciones y comunicaciones.' },
+      { head: 'Ejercicio de límites sanos', body: 'Una práctica semanal para reconocer y comunicar tus necesidades con claridad y amor.' }
+    ],
+    service: 'mentoria-individual',
+    toolPrimary: 'Arteterapia', toolSecondary: 'Geometría Sagrada'
+  },
+  espiritual: {
+    icon: '✨',
+    name: 'Espiritual',
+    subtitle: 'Propósito, sentido y conexión',
+    insight: 'Estás en un momento de búsqueda profunda: el propósito, el rumbo, la conexión contigo misma y con algo más grande. Esta dimensión pide ser escuchada.',
+    msg: 'Los momentos de desorientación espiritual son en realidad invitaciones a una conexión más profunda. No estás perdida — estás siendo llamada a un nuevo nivel de ti misma. Vamos a explorar eso juntas.',
+    steps: [
+      { head: 'Sesión de orientación interior', body: 'Explorar qué valores y propósitos están en el centro de quién eres, más allá de los roles que desempeñas.' },
+      { head: 'Geometría Sagrada como mapa', body: 'Los patrones sagrados como herramienta para conectar con el orden natural de tu proceso de vida.' },
+      { head: 'Ritual de reconexión', body: 'Una práctica sencilla diaria de 3-5 minutos para anclar la conexión con tu guía interior.' }
+    ],
+    service: 'mentoria-individual',
+    toolPrimary: 'Geometría Sagrada', toolSecondary: 'Reiki'
+  },
+  cognitivo: {
+    icon: '🧠',
+    name: 'Cognitivo',
+    subtitle: 'Creatividad, claridad y enfoque',
+    insight: 'Tu mente creativa está a tope, pero quizás sin un cauce claro. Los bloqueos creativos o la dispersión de ideas son señales de que necesitas un espacio estructurado para dar orden a tu potencial.',
+    msg: 'La mente creativa necesita tierra firme donde aterrizar. Tu potencial es evidente, pero cuando hay demasiado flujo sin estructura, la energía se dispersa. Juntas vamos a crear el contenedor para que tus ideas cobren vida.',
+    steps: [
+      { head: 'Cartografiar tu mente creativa', body: 'Un ejercicio de mapeo visual en la primera sesión para ver el panorama completo de tus ideas y proyectos.' },
+      { head: 'Arteterapia como desbloqueo', body: 'Crear libremente sin presión de resultado para reconectar con el flujo natural de tu creatividad.' },
+      { head: 'Sistema mínimo de enfoque', body: 'Una técnica simple para elegir el proyecto más importante cada semana y avanzar sin bloqueos.' }
+    ],
+    service: 'mentoria-individual',
+    toolPrimary: 'Arteterapia', toolSecondary: 'Geometría Sagrada'
+  }
+};
+
+const SERVICE_DETAILS = {
+  'mentoria-individual': {
+    name: 'Mentoría Individual',
+    desc: 'Un espacio completamente personalizado para ti. 90 minutos de acompañamiento profundo con Nathalia, donde arte, energía y conversación se combinan para acompañar tu transformación.',
+    details: ['90 minutos', 'Presencial o Virtual', 'Proceso personalizado'],
+    prices: [
+      { label: 'Sesión única', val: '$145.000', desc: 'Una sesión de 90 min' },
+      { label: 'Paquete 6 sesiones', val: '$785.000', desc: 'Ahorra $85.000' }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════
+//   RENDER RESULTS
+// ═══════════════════════════════════════
+function showResults(d, readOnly) {
+  isReadOnly = readOnly;
+
+  const scores = computeScores(d);
+  const primary = getPrimaryDimension(scores);
+  const info = DIMENSION_INFO[primary];
+  const nombre = d['nombre'] || 'amiga';
+
+  document.getElementById('r-name').textContent = nombre;
+  document.getElementById('r-fecha').textContent = d.fecha ? `Diagnóstico del ${d.fecha}` : `Diagnóstico de hoy`;
+
+  if (readOnly) {
+    document.getElementById('readonly-banner').style.display = 'block';
+    document.getElementById('banner-name').textContent = nombre;
+  }
+
+  const body = document.getElementById('results-body');
+  body.innerHTML = '';
+
+  // 1. Radar chart
+  body.innerHTML += `
+    <div class="radar-wrap fade-in">
+      <div class="radar-title">Perfil de tus 4 dimensiones</div>
+      <canvas id="radarCanvas" width="280" height="260"></canvas>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;">
+        ${Object.entries(scores).map(([k,v]) => `<div style="font-size:11px;background:rgba(86,122,34,.1);border-radius:20px;padding:4px 12px;color:var(--v1);font-weight:600;">${DIMENSION_INFO[k].icon} ${DIMENSION_INFO[k].name}: ${v}%</div>`).join('')}
+      </div>
+    </div>`;
+
+  // 2. Dimension cards
+  const dimOrder = [primary, ...Object.keys(scores).filter(k=>k!==primary)];
+  dimOrder.forEach(dim => {
+    const di = DIMENSION_INFO[dim];
+    const score = scores[dim];
+    const isPrimary = dim === primary;
+    body.innerHTML += `
+      <div class="dim-card fade-in ${isPrimary?'primary':''}">
+        <div class="dim-header">
+          <div class="dim-icon">${di.icon}</div>
+          <div><div class="dim-title">${di.name}</div><div class="dim-subtitle">${di.subtitle}</div></div>
+        </div>
+        <div class="dim-bar-wrap">
+          <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" data-target="${score}%"></div></div>
+          <div class="dim-score">${score}% de activación</div>
+        </div>
+        ${isPrimary ? `<p class="dim-insight">${di.insight}</p>` : ''}
+      </div>`;
+  });
+
+  // 3. Personal message
+  body.innerHTML += `
+    <div class="msg-card fade-in">
+      <div class="msg-from">Mensaje de Nathalia para ti</div>
+      <p class="msg-text">${info.msg}</p>
+      <div class="msg-sign">— Nathalia Velasco · Simoné Arte y Naturaleza</div>
+    </div>`;
+
+  // 4. Service recommendation
+  const svc = SERVICE_DETAILS['mentoria-individual'];
+  body.innerHTML += `
+    <div class="service-card fade-in">
+      <div class="service-tag">Mi recomendación para ti</div>
+      <div class="service-name">${svc.name}</div>
+      <p class="service-desc">${svc.desc}</p>
+      <div class="service-details">${svc.details.map(d=>`<div class="s-detail">${d}</div>`).join('')}</div>
+      <div class="service-tools">
+        <div class="service-tools-title">Herramientas principales</div>
+        <div class="tool-chips">
+          <div class="tool-chip">🎨 ${info.toolPrimary}</div>
+          <div class="tool-chip">✦ ${info.toolSecondary}</div>
+        </div>
+      </div>
+      <div class="price-wrap">${svc.prices.map(p=>`<div class="price-item"><div class="price-label">${p.label}</div><div class="price-val">${p.val}</div><div class="price-desc">${p.desc}</div></div>`).join('')}</div>
+    </div>`;
+
+  // 5. Next steps
+  body.innerHTML += `
+    <div class="steps-card fade-in">
+      <div class="steps-title">Tus próximos 3 pasos</div>
+      ${info.steps.map((s,i) => `<div class="step-item"><div class="step-num">${i+1}</div><div class="step-content"><div class="step-head">${s.head}</div><div class="step-body">${s.body}</div></div></div>`).join('')}
+    </div>`;
+
+  // 6. Share & WhatsApp (not in read-only)
+  const readClass = readOnly ? 'view-only' : '';
+  const waMsg = encodeURIComponent(`Hola Nathalia! Acabo de completar mi diagnóstico inicial. Mi nombre es ${nombre} y mi dimensión principal es ${info.name}. Me gustaría agendar una sesión.`);
+  body.innerHTML += `
+    <div class="${readClass}">
+      <div class="readonly-note">Este es el diagnóstico de ${nombre}. Solo lectura.</div>
+      <div class="share-row">
+        <button class="btn-share" onclick="copyLink()">🔗 Copiar enlace</button>
+        <button class="btn-share" onclick="copyLink()">📋 Compartir</button>
+      </div>
+      <a class="btn-wsp" href="https://wa.me/573208857608?text=${waMsg}" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar con Nathalia
+      </a>
+    </div>`;
+
+  goScreen('s-results');
+  document.getElementById('progress-bar-wrap').style.display = 'none';
+
+  // Animate bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.dim-bar-fill').forEach(bar => {
+      bar.style.width = bar.getAttribute('data-target');
+    });
+    drawRadar(scores);
+  }, 300);
+}
+
+// ═══════════════════════════════════════
+//   RADAR CHART (SVG-based via Canvas)
+// ═══════════════════════════════════════
+function drawRadar(scores) {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 140, cy = 130, r = 100;
+  const dims = ['emocional','comunicacional','espiritual','cognitivo'];
+  const labels = ['Emocional','Comunicacional','Espiritual','Cognitivo'];
+  const icons = ['💚','🗣️','✨','🧠'];
+  const n = 4;
+  const angles = dims.map((_,i) => (i * 2*Math.PI/n) - Math.PI/2);
+
+  ctx.clearRect(0,0,280,260);
+
+  // Grid rings
+  [0.25,0.5,0.75,1].forEach(pct => {
+    ctx.beginPath();
+    angles.forEach((a,i) => {
+      const x = cx + Math.cos(a)*r*pct;
+      const y = cy + Math.sin(a)*r*pct;
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(86,122,34,0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Axis lines
+  angles.forEach(a => {
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+    ctx.strokeStyle = 'rgba(86,122,34,0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Data fill
+  ctx.beginPath();
+  dims.forEach((dim,i) => {
+    const pct = scores[dim]/100;
+    const x = cx + Math.cos(angles[i])*r*pct;
+    const y = cy + Math.sin(angles[i])*r*pct;
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(86,122,34,0.18)';
+  ctx.fill();
+  ctx.strokeStyle = '#567a22';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Data points
+  dims.forEach((dim,i) => {
+    const pct = scores[dim]/100;
+    const x = cx + Math.cos(angles[i])*r*pct;
+    const y = cy + Math.sin(angles[i])*r*pct;
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,2*Math.PI);
+    ctx.fillStyle = '#3d5016';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+
+  // Labels
+  ctx.font = '11px Montserrat, sans-serif';
+  ctx.textAlign = 'center';
+  dims.forEach((dim,i) => {
+    const lx = cx + Math.cos(angles[i])*(r+22);
+    const ly = cy + Math.sin(angles[i])*(r+22);
+    ctx.fillStyle = '#3d5016';
+    ctx.fillText(labels[i], lx, ly);
+  });
+}
+
+// ═══════════════════════════════════════
+//   SHARE LINK
+// ═══════════════════════════════════════
+function copyLink() {
+  collectFormData();
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(formData))));
+  const url = window.location.href.split('#')[0] + '#ver=' + encoded;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('✓ Enlace copiado — compártelo con Nathalia');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = url; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    ta.remove();
+    showToast('✓ Enlace copiado');
+  });
+}
+
+// ═══════════════════════════════════════
+//   ADMIN PANEL STORAGE
+// ═══════════════════════════════════════
+function guardarEnPanel(d, encoded) {
+  try {
+    const lista = JSON.parse(localStorage.getItem('natha_panel') || '[]');
+    const existe = lista.some(x => x.nombre === d.nombre && x.fecha === d.fecha && x.hora === d.hora);
+    if (!existe) {
+      lista.unshift({
+        ...d,
+        _encoded: encoded,
+        _recibido: new Date().toLocaleString('es-CO'),
+        _scores: computeScores(d),
+        _primary: getPrimaryDimension(computeScores(d))
+      });
+      localStorage.setItem('natha_panel', JSON.stringify(lista));
+    }
+  } catch(e) {}
+}
 </script>
 </body>
 </html>
