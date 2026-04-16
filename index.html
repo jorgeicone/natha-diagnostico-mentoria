@@ -916,17 +916,21 @@ function submitDiag() {
   formData.hora = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
   localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 
+  // Save to panel immediately (same-device flow)
+  const encForPanel = btoa(unescape(encodeURIComponent(JSON.stringify(formData))));
+  guardarEnPanel(formData, encForPanel);
+
   goScreen('s-loading');
   document.getElementById('progress-bar-fill').style.width = '100%';
 
   const steps = ['ls-1','ls-2','ls-3','ls-4'];
-  steps.forEach((id, i) => {
-    setTimeout(() => document.getElementById(id).classList.add('done'), 600 + i*800);
+  steps.forEach(function(id, i) {
+    setTimeout(function(){ document.getElementById(id).classList.add('done'); }, 500 + i*600);
   });
 
-  setTimeout(() => {
+  setTimeout(function() {
     showResults(formData, false);
-  }, 4200);
+  }, 3000);
 }
 
 // ═══════════════════════════════════════
@@ -1081,113 +1085,91 @@ const SERVICE_DETAILS = {
 //   RENDER RESULTS
 // ═══════════════════════════════════════
 function showResults(d, readOnly) {
+  // Transition to results screen FIRST — always
   isReadOnly = readOnly;
-
-  const scores = computeScores(d);
-  const primary = getPrimaryDimension(scores);
-  const info = DIMENSION_INFO[primary];
-  const nombre = d['nombre'] || 'amiga';
-
-  document.getElementById('r-name').textContent = nombre;
-  document.getElementById('r-fecha').textContent = d.fecha ? `Diagnóstico del ${d.fecha}` : `Diagnóstico de hoy`;
-
-  if (readOnly) {
-    document.getElementById('readonly-banner').style.display = 'block';
-    document.getElementById('banner-name').textContent = nombre;
-  }
-
-  const body = document.getElementById('results-body');
-  body.innerHTML = '';
-
-  // 1. Radar chart
-  body.innerHTML += `
-    <div class="radar-wrap fade-in">
-      <div class="radar-title">Perfil de tus 4 dimensiones</div>
-      <canvas id="radarCanvas" width="280" height="260"></canvas>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;">
-        ${Object.entries(scores).map(([k,v]) => `<div style="font-size:11px;background:rgba(86,122,34,.1);border-radius:20px;padding:4px 12px;color:var(--v1);font-weight:600;">${DIMENSION_INFO[k].icon} ${DIMENSION_INFO[k].name}: ${v}%</div>`).join('')}
-      </div>
-    </div>`;
-
-  // 2. Dimension cards
-  const dimOrder = [primary, ...Object.keys(scores).filter(k=>k!==primary)];
-  dimOrder.forEach(dim => {
-    const di = DIMENSION_INFO[dim];
-    const score = scores[dim];
-    const isPrimary = dim === primary;
-    body.innerHTML += `
-      <div class="dim-card fade-in ${isPrimary?'primary':''}">
-        <div class="dim-header">
-          <div class="dim-icon">${di.icon}</div>
-          <div><div class="dim-title">${di.name}</div><div class="dim-subtitle">${di.subtitle}</div></div>
-        </div>
-        <div class="dim-bar-wrap">
-          <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" data-target="${score}%"></div></div>
-          <div class="dim-score">${score}% de activación</div>
-        </div>
-        ${isPrimary ? `<p class="dim-insight">${di.insight}</p>` : ''}
-      </div>`;
-  });
-
-  // 3. Personal message
-  body.innerHTML += `
-    <div class="msg-card fade-in">
-      <div class="msg-from">Mensaje de Nathalia para ti</div>
-      <p class="msg-text">${info.msg}</p>
-      <div class="msg-sign">— Nathalia Velasco · Simoné Arte y Naturaleza</div>
-    </div>`;
-
-  // 4. Service recommendation
-  const svc = SERVICE_DETAILS['mentoria-individual'];
-  body.innerHTML += `
-    <div class="service-card fade-in">
-      <div class="service-tag">Mi recomendación para ti</div>
-      <div class="service-name">${svc.name}</div>
-      <p class="service-desc">${svc.desc}</p>
-      <div class="service-details">${svc.details.map(d=>`<div class="s-detail">${d}</div>`).join('')}</div>
-      <div class="service-tools">
-        <div class="service-tools-title">Herramientas principales</div>
-        <div class="tool-chips">
-          <div class="tool-chip">🎨 ${info.toolPrimary}</div>
-          <div class="tool-chip">✦ ${info.toolSecondary}</div>
-        </div>
-      </div>
-      <div class="price-wrap">${svc.prices.map(p=>`<div class="price-item"><div class="price-label">${p.label}</div><div class="price-val">${p.val}</div><div class="price-desc">${p.desc}</div></div>`).join('')}</div>
-    </div>`;
-
-  // 5. Next steps
-  body.innerHTML += `
-    <div class="steps-card fade-in">
-      <div class="steps-title">Tus próximos 3 pasos</div>
-      ${info.steps.map((s,i) => `<div class="step-item"><div class="step-num">${i+1}</div><div class="step-content"><div class="step-head">${s.head}</div><div class="step-body">${s.body}</div></div></div>`).join('')}
-    </div>`;
-
-  // 6. Share & WhatsApp (not in read-only)
-  const readClass = readOnly ? 'view-only' : '';
-  const waMsg = encodeURIComponent(`Hola Nathalia! Acabo de completar mi diagnóstico inicial. Mi nombre es ${nombre} y mi dimensión principal es ${info.name}. Me gustaría agendar una sesión.`);
-  body.innerHTML += `
-    <div class="${readClass}">
-      <div class="readonly-note">Este es el diagnóstico de ${nombre}. Solo lectura.</div>
-      <div class="share-row">
-        <button class="btn-share" onclick="copyLink()">🔗 Copiar enlace</button>
-        <button class="btn-share" onclick="copyLink()">📋 Compartir</button>
-      </div>
-      <a class="btn-wsp" href="https://wa.me/573208857608?text=${waMsg}" target="_blank">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Agendar con Nathalia
-      </a>
-    </div>`;
-
   goScreen('s-results');
   document.getElementById('progress-bar-wrap').style.display = 'none';
 
-  // Animate bars after render
-  setTimeout(() => {
-    document.querySelectorAll('.dim-bar-fill').forEach(bar => {
-      bar.style.width = bar.getAttribute('data-target');
+  try {
+    const scores = computeScores(d);
+    const primary = getPrimaryDimension(scores);
+    const info = DIMENSION_INFO[primary];
+    const nombre = (d['nombre'] || 'amiga').trim() || 'amiga';
+
+    document.getElementById('r-name').textContent = nombre;
+    document.getElementById('r-fecha').textContent = d.fecha ? 'Diagn\u00f3stico del ' + d.fecha : 'Diagn\u00f3stico de hoy';
+
+    if (readOnly) {
+      document.getElementById('readonly-banner').style.display = 'block';
+      document.getElementById('banner-name').textContent = nombre;
+    }
+
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // 1. Radar chart
+    let pillsHtml = '';
+    Object.entries(scores).forEach(function(entry) {
+      var k = entry[0]; var v = entry[1];
+      pillsHtml += '<div style="font-size:11px;background:rgba(86,122,34,.1);border-radius:20px;padding:4px 12px;color:var(--v1);font-weight:600;">' + DIMENSION_INFO[k].icon + ' ' + DIMENSION_INFO[k].name + ': ' + v + '%</div>';
     });
-    drawRadar(scores);
-  }, 300);
+    html += '<div class="radar-wrap fade-in"><div class="radar-title">Perfil de tus 4 dimensiones</div><canvas id="radarCanvas" width="280" height="260"></canvas><div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;">' + pillsHtml + '</div></div>';
+
+    // 2. Dimension cards
+    const dimOrder = [primary];
+    Object.keys(scores).forEach(function(k){ if(k!==primary) dimOrder.push(k); });
+    dimOrder.forEach(function(dim) {
+      var di = DIMENSION_INFO[dim];
+      var score = scores[dim];
+      var isPrim = dim === primary;
+      html += '<div class="dim-card fade-in' + (isPrim?' primary':'') + '">';
+      html += '<div class="dim-header"><div class="dim-icon">' + di.icon + '</div><div><div class="dim-title">' + di.name + '</div><div class="dim-subtitle">' + di.subtitle + '</div></div></div>';
+      html += '<div class="dim-bar-wrap"><div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" data-target="' + score + '%"></div></div><div class="dim-score">' + score + '% de activaci\u00f3n</div></div>';
+      if (isPrim) html += '<p class="dim-insight">' + di.insight + '</p>';
+      html += '</div>';
+    });
+
+    // 3. Personal message
+    html += '<div class="msg-card fade-in"><div class="msg-from">Mensaje de Nathalia para ti</div><p class="msg-text">' + info.msg + '</p><div class="msg-sign">\u2014 Nathalia Velasco \u00b7 Sim\u00f3n\u00e9 Arte y Naturaleza</div></div>';
+
+    // 4. Service recommendation
+    const svc = SERVICE_DETAILS['mentoria-individual'];
+    let detailsHtml = '';
+    svc.details.forEach(function(det){ detailsHtml += '<div class="s-detail">' + det + '</div>'; });
+    let pricesHtml = '';
+    svc.prices.forEach(function(pr){ pricesHtml += '<div class="price-item"><div class="price-label">' + pr.label + '</div><div class="price-val">' + pr.val + '</div><div class="price-desc">' + pr.desc + '</div></div>'; });
+    html += '<div class="service-card fade-in"><div class="service-tag">Mi recomendaci\u00f3n para ti</div><div class="service-name">' + svc.name + '</div><p class="service-desc">' + svc.desc + '</p><div class="service-details">' + detailsHtml + '</div><div class="service-tools"><div class="service-tools-title">Herramientas principales</div><div class="tool-chips"><div class="tool-chip">\uD83C\uDFA8 ' + info.toolPrimary + '</div><div class="tool-chip">\u2736 ' + info.toolSecondary + '</div></div></div><div class="price-wrap">' + pricesHtml + '</div></div>';
+
+    // 5. Next steps
+    let stepsHtml = '';
+    info.steps.forEach(function(st, i){ stepsHtml += '<div class="step-item"><div class="step-num">' + (i+1) + '</div><div class="step-content"><div class="step-head">' + st.head + '</div><div class="step-body">' + st.body + '</div></div></div>'; });
+    html += '<div class="steps-card fade-in"><div class="steps-title">Tus pr\u00f3ximos 3 pasos</div>' + stepsHtml + '</div>';
+
+    // 6. Share & WhatsApp
+    const waText = 'Hola Nathalia! Acabo de completar mi diagn\u00f3stico inicial. Mi nombre es ' + nombre + ' y mi dimensi\u00f3n principal es ' + info.name + '. Me gustar\u00eda agendar una sesi\u00f3n.';
+    const waMsg = encodeURIComponent(waText);
+    const roClass = readOnly ? 'view-only' : '';
+    html += '<div class="' + roClass + '">';
+    html += '<div class="readonly-note">Este es el diagn\u00f3stico de ' + nombre + '. Solo lectura.</div>';
+    html += '<div class="share-row"><button class="btn-share" onclick="copyLink()">\uD83D\uDD17 Copiar enlace</button><button class="btn-share" onclick="copyLink()">\uD83D\uDCCB Compartir</button></div>';
+    html += '<a class="btn-wsp" href="https://wa.me/573208857608?text=' + waMsg + '" target="_blank" rel="noopener">';
+    html += '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+    html += 'Agendar con Nathalia</a></div>';
+
+    body.innerHTML = html;
+
+    // Animate bars + draw radar
+    setTimeout(function() {
+      document.querySelectorAll('.dim-bar-fill').forEach(function(bar){
+        bar.style.width = bar.getAttribute('data-target');
+      });
+      drawRadar(scores);
+    }, 400);
+
+  } catch(err) {
+    console.error('Error en showResults:', err);
+    document.getElementById('results-body').innerHTML = '<div class="dim-card" style="margin-top:20px;"><p style="color:var(--ts);line-height:1.7;">Tu diagn\u00f3stico fue recibido correctamente. Por favor recarga la p\u00e1gina para verlo.</p></div>';
+  }
 }
 
 // ═══════════════════════════════════════
